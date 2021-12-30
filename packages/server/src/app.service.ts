@@ -162,7 +162,6 @@ export class AppService {
     }
 
     if (newData.nightVisionOn) {
-      console.log('Nightvision an');
       rpio.write(PIN_NIGHTVISION, rpio.HIGH);
     } else {
       rpio.write(PIN_NIGHTVISION, rpio.LOW);

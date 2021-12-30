@@ -9,6 +9,7 @@ const resources = {
   en: {
     translation: {
       TITLE_BIRDHOUSE: "Open Birdhouse",
+      LOADING: "Loading...",
       PAGES: {
         CAMERAS: "Cameras",
       },
@@ -25,8 +26,9 @@ const resources = {
         ON: "on",
         OFF: "off",
         OUTDOOR_LIGHT: "Outdoor light",
-        INDOOR_LIGHT: "Indoor light",
-        INDOOR_LIGHT_COLOR: "Indoor light color",
+        ROOM_LIGHT: "Indoor light",
+        NIGHTVISION: "Nightvision",
+        ROOM_LIGHT_COLOR: "Indoor light color",
         COLORS: {
           WHITE: "white",
           RED: "red",
@@ -41,6 +43,7 @@ const resources = {
   de: {
     translation: {
       TITLE_BIRDHOUSE: "Vogelhaus",
+      LOADING: "Lade...",
       PAGES: {
         CAMERAS: "Kameras",
       },
@@ -57,8 +60,9 @@ const resources = {
         ON: "an",
         OFF: "aus",
         OUTDOOR_LIGHT: "Außenlicht",
-        INDOOR_LIGHT: "Innenlicht",
-        INDOOR_LIGHT_COLOR: "Innenlicht Farbe",
+        ROOM_LIGHT: "Innenlicht",
+        NIGHTVISION: "Nachtsicht",
+        ROOM_LIGHT_COLOR: "Innenlicht Farbe",
         COLORS: {
           WHITE: "Weiß",
           RED: "Rot",
@@ -82,6 +86,7 @@ i18n
     // if you're using a language detector, do not define the lng option
     nonExplicitSupportedLngs: true,
     debug: false,
+    fallbackLng: "en",
     interpolation: {
       escapeValue: false, // react already safes from xss
     },

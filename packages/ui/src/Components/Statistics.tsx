@@ -6,6 +6,7 @@ import {
   TableRow,
   TableBody,
   TableCell,
+  Loading,
 } from "carbon-components-react";
 import { withTranslation } from "react-i18next";
 import { t } from "i18next";
@@ -50,8 +51,8 @@ const Statistics = ({ t }: { t: any }) => {
       ]);
     };
     fetchData();
-  }, []);
-  return (
+  }, [t]);
+  return statistics.length > 0 ? (
     <DataTable rows={statistics} headers={headerData}>
       {({
         rows,
@@ -79,6 +80,11 @@ const Statistics = ({ t }: { t: any }) => {
         </TableContainer>
       )}
     </DataTable>
+  ) : (
+    <div>
+      {t("LOADING")}
+      <Loading description={t("LOADING")} withOverlay={false} />
+    </div>
   );
 };
 
