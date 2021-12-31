@@ -4,7 +4,6 @@ import { withTranslation } from "react-i18next";
 import ApiRequestService from "../Services/ApiRequestService";
 import { Cam } from "@open-birdhouse/common";
 import spinner from "../spinner.svg";
-import { getByPlaceholderText } from "@testing-library/dom";
 
 const apiService = new ApiRequestService();
 

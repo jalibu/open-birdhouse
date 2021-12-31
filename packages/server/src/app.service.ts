@@ -84,8 +84,8 @@ export class AppService {
 
   getCams(): Cam[] {
     return [
-      { id: 1, name: 'Außenkamera', url: 'http://192.168.178.199/cam' },
-      { id: 2, name: 'Innenkamera', url: 'http://192.168.178.199/cam2' },
+      { id: 1, name: 'Außenkamera', url: '/cam' },
+      { id: 2, name: 'Innenkamera', url: '/cam2' },
     ];
   }
 
@@ -169,27 +169,27 @@ export class AppService {
 
     if (newData.roomLightOn) {
       switch (newData.roomLightColor) {
-        case 'red':
+        case 'RED':
           rpio.write(PIN_BLUE, rpio.LOW);
           rpio.write(PIN_GREEN, rpio.LOW);
           rpio.write(PIN_RED, rpio.HIGH);
           break;
-        case 'green':
+        case 'GREEN':
           rpio.write(PIN_BLUE, rpio.LOW);
           rpio.write(PIN_GREEN, rpio.HIGH);
           rpio.write(PIN_RED, rpio.LOW);
           break;
-        case 'blue':
+        case 'BLUE':
           rpio.write(PIN_BLUE, rpio.HIGH);
           rpio.write(PIN_GREEN, rpio.LOW);
           rpio.write(PIN_RED, rpio.LOW);
           break;
-        case 'cyan':
+        case 'CYAN':
           rpio.write(PIN_BLUE, rpio.HIGH);
           rpio.write(PIN_GREEN, rpio.HIGH);
           rpio.write(PIN_RED, rpio.LOW);
           break;
-        case 'magenta':
+        case 'MAGENTA':
           rpio.write(PIN_BLUE, rpio.HIGH);
           rpio.write(PIN_GREEN, rpio.LOW);
           rpio.write(PIN_RED, rpio.HIGH);
