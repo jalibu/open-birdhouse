@@ -34,11 +34,16 @@ const Cams = ({ t }: { t: any }) => {
           key={`tab-cam-${cam.id}`}
           label={cam.name}
         >
-            <img
-              src={camIndex === activeCam ? cam.url : spinner}
-              style={{ minHeight: "240px", maxHeight:"600px", background: 'url(placeholder.jpeg) no-repeat scroll 0 0' }}
-              alt={cam.name}
-            />
+          <img
+            src={camIndex === activeCam ? cam.url : spinner}
+            style={{
+              minHeight: "240px",
+              maxHeight: "600px",
+              maxWidth: "100%",
+              background: "url(placeholder.jpeg) no-repeat scroll 0 0",
+            }}
+            alt={cam.name}
+          />
         </Tab>
       ))}
     </Tabs>
