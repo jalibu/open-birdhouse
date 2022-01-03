@@ -9,7 +9,6 @@ import {
   Loading,
 } from "carbon-components-react";
 import { withTranslation } from "react-i18next";
-import { t } from "i18next";
 import ApiRequestService from "../Services/ApiRequestService";
 
 type RowData = {

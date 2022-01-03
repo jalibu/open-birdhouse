@@ -2928,6 +2928,11 @@
     "@types/react" "*"
     flatpickr "4.6.9"
 
+"@types/carbon__icons-react@^10.31.2":
+  version "10.31.2"
+  resolved "https://registry.yarnpkg.com/@types/carbon__icons-react/-/carbon__icons-react-10.31.2.tgz#3aad2a752f82ccc8a0151d8053edcebc0dc92765"
+  integrity sha512-TFZhgEZVCTbB0AsQfohcMLC1dblJxGIDjSJeleiie5z7bc1O6qfLAjomh0bg54EgkuTNK2UIMJ2QPL1qPQZJyQ==
+
 "@types/connect-history-api-fallback@^1.3.5":
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/@types/connect-history-api-fallback/-/connect-history-api-fallback-1.3.5.tgz#d1f7a8a09d0ed5a57aee5ae9c18ab9b803205dae"
