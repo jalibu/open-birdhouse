@@ -16,12 +16,20 @@ export default class ApiRequestService {
   }
 
   async getStatistics(): Promise<Statistics> {
-    const response = await fetch(`${REACT_APP_API_URL}/api/statistics`);
+    const response = await fetch(`${REACT_APP_API_URL}/api/statistics`, {
+      headers: {
+        "Bypass-Tunnel-Reminder": "true",
+      },
+    });
     return await response.json();
   }
 
   async getControls(): Promise<ControlsStatus> {
-    const response = await fetch(`${REACT_APP_API_URL}/api/controls`);
+    const response = await fetch(`${REACT_APP_API_URL}/api/controls`, {
+      headers: {
+        "Bypass-Tunnel-Reminder": "true",
+      },
+    });
     return await response.json();
   }
 
@@ -32,6 +40,7 @@ export default class ApiRequestService {
       method: "POST",
       body: JSON.stringify(controls),
       headers: {
+        "Bypass-Tunnel-Reminder": "true",
         "Content-Type": "application/json",
       },
     });
