@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   DataTable,
   TableContainer,
@@ -10,6 +10,7 @@ import {
 } from "carbon-components-react";
 import { withTranslation } from "react-i18next";
 import ApiRequestService from "../Services/ApiRequestService";
+import StatusContext from "../Context/StatusContext/StatusContext";
 
 type RowData = {
   id: string;
@@ -28,9 +29,9 @@ const headerData = [
   },
 ];
 
-const apiService = new ApiRequestService();
-
 const Statistics = ({ t }: { t: any }) => {
+  const statusContext = useContext(StatusContext);
+  const apiService = new ApiRequestService(statusContext);
   const [statistics, setStatistics] = useState<RowData[]>([]);
 
   useEffect(() => {
@@ -51,6 +52,7 @@ const Statistics = ({ t }: { t: any }) => {
     };
     fetchData();
   }, [t]);
+
   return statistics.length > 0 ? (
     <DataTable rows={statistics} headers={headerData}>
       {({
@@ -81,8 +83,8 @@ const Statistics = ({ t }: { t: any }) => {
     </DataTable>
   ) : (
     <div>
-      {t("LOADING")}
-      <Loading description={t("LOADING")} withOverlay={false} />
+      <Loading withOverlay={false} />
+      {`${t("LOADING")} ${t("STATS.TITLE")}...`}
     </div>
   );
 };

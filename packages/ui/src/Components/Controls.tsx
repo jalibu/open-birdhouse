@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   FormGroup,
   Toggle,
@@ -9,15 +9,16 @@ import {
 import { withTranslation } from "react-i18next";
 import ApiRequestService from "../Services/ApiRequestService";
 import { ControlsStatus } from "@open-birdhouse/common";
-
-const apiService = new ApiRequestService();
+import StatusContext from "../Context/StatusContext/StatusContext";
 
 const Controls = ({ t }: { t: any }) => {
   const [controls, setControls] = useState<ControlsStatus>();
 
+  const statusContext = useContext(StatusContext);
+  const apiService = new ApiRequestService(statusContext);
+
   const postControls = async (controls: ControlsStatus) => {
     apiService.setControls(controls);
-    //setControls(newControls);
   };
 
   useEffect(() => {
@@ -33,8 +34,8 @@ const Controls = ({ t }: { t: any }) => {
       <Toggle
         id="toggle-outdoor-light"
         toggled={controls.outdoorLightOn}
-        labelA={`${t("CONTROLS.OUTDOOR_LIGHT")}  ${t("CONTROLS.ON")}`}
-        labelB={`${t("CONTROLS.OUTDOOR_LIGHT")}  ${t("CONTROLS.OFF")}`}
+        labelA={`${t("CONTROLS.OUTDOOR_LIGHT")}  ${t("CONTROLS.OFF")}`}
+        labelB={`${t("CONTROLS.OUTDOOR_LIGHT")}  ${t("CONTROLS.ON")}`}
         onToggle={(toggled) => {
           const newControls = {
             ...controls,
@@ -47,8 +48,8 @@ const Controls = ({ t }: { t: any }) => {
       <Toggle
         id="toggle-nightvision"
         toggled={controls.nightVisionOn}
-        labelA={`${t("CONTROLS.NIGHTVISION")}  ${t("CONTROLS.ON")}`}
-        labelB={`${t("CONTROLS.NIGHTVISION")}  ${t("CONTROLS.OFF")}`}
+        labelA={`${t("CONTROLS.NIGHTVISION")}  ${t("CONTROLS.OFF")}`}
+        labelB={`${t("CONTROLS.NIGHTVISION")}  ${t("CONTROLS.ON")}`}
         onToggle={(toggled) => {
           const newControls = {
             ...controls,
@@ -61,8 +62,8 @@ const Controls = ({ t }: { t: any }) => {
       <Toggle
         id="toggle-room-light"
         toggled={controls.roomLightOn}
-        labelA={`${t("CONTROLS.ROOM_LIGHT")}  ${t("CONTROLS.ON")}`}
-        labelB={`${t("CONTROLS.ROOM_LIGHT")}  ${t("CONTROLS.OFF")}`}
+        labelA={`${t("CONTROLS.ROOM_LIGHT")}  ${t("CONTROLS.OFF")}`}
+        labelB={`${t("CONTROLS.ROOM_LIGHT")}  ${t("CONTROLS.ON")}`}
         onToggle={(toggled) => {
           const newControls = {
             ...controls,
@@ -98,8 +99,8 @@ const Controls = ({ t }: { t: any }) => {
     </FormGroup>
   ) : (
     <div>
-      {t("LOADING")}
-      <Loading description={t("LOADING")} withOverlay={false} />
+      <Loading withOverlay={false} />
+      {`${t("LOADING")} ${t("CONTROLS.TITLE")}...`}
     </div>
   );
 };

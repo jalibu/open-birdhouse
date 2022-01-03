@@ -1,16 +1,19 @@
 import { Cam, ControlsStatus, Statistics } from "@open-birdhouse/common";
+import GenericApiRequestService from "./GenericApiRequestService";
 
 const REACT_APP_API_URL = process.env.REACT_APP_API_URL || "";
 const REACT_APP_CAM_URL = process.env.REACT_APP_CAM_URL || "";
 
-export default class ApiRequestService {
+export default class ApiRequestService extends GenericApiRequestService {
   async getCams(): Promise<Cam[]> {
-    const response = await fetch(`${REACT_APP_API_URL}/api/cams`, {
-      headers: {
-        "Bypass-Tunnel-Reminder": "true",
+    const cams: Cam[] = await this.doFetch(
+      `${REACT_APP_API_URL}/api/cams`,
+      {
+        headers: this.getHeaders(),
       },
-    });
-    const cams: Cam[] = await response.json();
+      true,
+      true
+    );
 
     cams.forEach((cam) => {
       cam.url = `${REACT_APP_CAM_URL}${cam.url}`;
@@ -20,34 +23,39 @@ export default class ApiRequestService {
   }
 
   async getStatistics(): Promise<Statistics> {
-    const response = await fetch(`${REACT_APP_API_URL}/api/statistics`, {
-      headers: {
-        "Bypass-Tunnel-Reminder": "true",
+    return await this.doFetch(
+      `${REACT_APP_API_URL}/api/statistics`,
+      {
+        headers: this.getHeaders(),
       },
-    });
-    return await response.json();
+      true,
+      true
+    );
   }
 
   async getControls(): Promise<ControlsStatus> {
-    const response = await fetch(`${REACT_APP_API_URL}/api/controls`, {
-      headers: {
-        "Bypass-Tunnel-Reminder": "true",
+    return await this.doFetch(
+      `${REACT_APP_API_URL}/api/controls`,
+      {
+        headers: this.getHeaders(),
       },
-    });
-    return await response.json();
+      true,
+      true
+    );
   }
 
   async setControls(
     controls: ControlsStatus | undefined
   ): Promise<ControlsStatus> {
-    const response = await fetch(`${REACT_APP_API_URL}/api/controls`, {
-      method: "POST",
-      body: JSON.stringify(controls),
-      headers: {
-        "Bypass-Tunnel-Reminder": "true",
-        "Content-Type": "application/json",
+    return await this.doFetch(
+      `${REACT_APP_API_URL}/api/controls`,
+      {
+        method: "POST",
+        body: JSON.stringify(controls),
+        headers: this.getHeaders(),
       },
-    });
-    return await response.json();
+      true,
+      true
+    );
   }
 }

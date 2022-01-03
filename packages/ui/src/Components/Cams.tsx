@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Tabs, Tab, Loading } from "carbon-components-react";
 import { withTranslation } from "react-i18next";
 import ApiRequestService from "../Services/ApiRequestService";
 import { Cam } from "@open-birdhouse/common";
 import spinner from "../spinner.svg";
+import StatusContext from "../Context/StatusContext/StatusContext";
 
-const apiService = new ApiRequestService();
 
 const Cams = ({ t }: { t: any }) => {
   const [cams, setCams] = useState<Cam[]>([]);
   const [activeCam, setActiveCam] = useState<number>(0);
+  
+  const statusContext = useContext(StatusContext)
+  const apiService = new ApiRequestService(statusContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,8 +52,8 @@ const Cams = ({ t }: { t: any }) => {
     </Tabs>
   ) : (
     <div>
-      {t("CAMS.LOADING")}
-      <Loading description={t("CAMS.LOADING")} withOverlay={false} />
+      <Loading withOverlay={false} />
+      {`${t("LOADING")} ${t("CAMERAS.TITLE")}...`}
     </div>
   );
 };

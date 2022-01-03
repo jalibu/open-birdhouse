@@ -9,12 +9,12 @@ const resources = {
   en: {
     translation: {
       TITLE_BIRDHOUSE: "Open Birdhouse",
-      LOADING: "Loading...",
+      LOADING: "Loading",
       PAGES: {
         CAMERAS: "Cameras",
       },
-      CAMS: {
-        LOADING: "Loading cameras..."
+      CAMERAS: {
+        TITLE: "Cameras"
       },
       STATS: {
         TITLE: "Statistics",
@@ -43,12 +43,12 @@ const resources = {
   de: {
     translation: {
       TITLE_BIRDHOUSE: "Vogelhaus",
-      LOADING: "Lade...",
+      LOADING: "Lade",
       PAGES: {
         CAMERAS: "Kameras",
       },
-      CAMS: {
-        LOADING: "Lade Kameras..."
+      CAMERAS: {
+        TITLE: "Kameras"
       },
       STATS: {
         TITLE: "Statistik",

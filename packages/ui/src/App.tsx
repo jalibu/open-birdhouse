@@ -6,15 +6,24 @@ import "./App.scss";
 import { withTranslation } from "react-i18next";
 import Statistics from "./Components/Statistics";
 import PageHeader from "./Components/Header/PageHeader";
+import StatusContextProvider from "./Context/StatusContext/StatusContextProvider";
+import {
+  GlobalLoadingNotification,
+  GlobalNotification,
+} from "./Context/StatusContext/StatusConsumers";
 
 const App = ({ t }: { t: any }) => (
   <div className="container">
-    <PageHeader />
-    <Content className="page-content">
-      <Cams />
-      <Controls />
-      <Statistics />
-    </Content>
+    <StatusContextProvider>
+      <GlobalLoadingNotification />
+      <GlobalNotification />
+      <PageHeader />
+      <Content className="page-content">
+        <Cams />
+        <Controls />
+        <Statistics />
+      </Content>
+    </StatusContextProvider>
   </div>
 );
 

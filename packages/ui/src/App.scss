@@ -1,3 +1,12 @@
 .page-content {
     max-width: max-content;
 }
+.globalNotification {
+    position: fixed !important;
+    z-index: 10000;
+    left: 50%;
+    margin-top: 2em !important;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+  
