@@ -5,7 +5,11 @@ const REACT_APP_CAM_URL = process.env.REACT_APP_CAM_URL || "";
 
 export default class ApiRequestService {
   async getCams(): Promise<Cam[]> {
-    const response = await fetch(`${REACT_APP_API_URL}/api/cams`);
+    const response = await fetch(`${REACT_APP_API_URL}/api/cams`, {
+      headers: {
+        "Bypass-Tunnel-Reminder": "true",
+      },
+    });
     const cams: Cam[] = await response.json();
 
     cams.forEach((cam) => {
