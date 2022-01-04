@@ -5,8 +5,8 @@ const REACT_APP_API_URL = process.env.REACT_APP_API_URL || "";
 const REACT_APP_CAM_URL = process.env.REACT_APP_CAM_URL || "";
 
 export default class ApiRequestService extends GenericApiRequestService {
-  async getCams(): Promise<Cam[]> {
-    const cams: Cam[] = await this.doFetch(
+  async getCams(): Promise<Cam[] | null> {
+    const cams = await this.doFetch<Cam[]>(
       `${REACT_APP_API_URL}/api/cams`,
       {
         headers: this.getHeaders(),
@@ -15,15 +15,19 @@ export default class ApiRequestService extends GenericApiRequestService {
       true
     );
 
-    cams.forEach((cam) => {
-      cam.url = `${REACT_APP_CAM_URL}${cam.url}`;
-    });
+    if (cams) {
+      cams.forEach((cam) => {
+        cam.url = `${REACT_APP_CAM_URL}${cam.url}`;
+      });
 
-    return cams;
+      return cams;
+    }
+
+    return null;
   }
 
-  async getStatistics(): Promise<Statistics> {
-    return await this.doFetch(
+  async getStatistics(): Promise<Statistics | null> {
+    return await this.doFetch<Statistics>(
       `${REACT_APP_API_URL}/api/statistics`,
       {
         headers: this.getHeaders(),
@@ -33,8 +37,8 @@ export default class ApiRequestService extends GenericApiRequestService {
     );
   }
 
-  async getControls(): Promise<ControlsStatus> {
-    return await this.doFetch(
+  async getControls(): Promise<ControlsStatus | null> {
+    return await this.doFetch<ControlsStatus>(
       `${REACT_APP_API_URL}/api/controls`,
       {
         headers: this.getHeaders(),
@@ -46,8 +50,8 @@ export default class ApiRequestService extends GenericApiRequestService {
 
   async setControls(
     controls: ControlsStatus | undefined
-  ): Promise<ControlsStatus> {
-    return await this.doFetch(
+  ): Promise<ControlsStatus | null> {
+    return await this.doFetch<ControlsStatus>(
       `${REACT_APP_API_URL}/api/controls`,
       {
         method: "POST",

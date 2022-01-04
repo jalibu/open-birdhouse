@@ -7,21 +7,46 @@ export default function StatusContextProvider({
 }: {
   children: React.ReactNode;
 }): JSX.Element {
-  const [message, setMessage] = useState<GlobalMessage | null>();
-  const [isLoading, setLoading] = useState<boolean>(false);
+  const [messages, setMessages] = useState<GlobalMessage[]>([]);
+  const [loaders, setLoaders] = useState<number>(0);
 
-  const clearMessage = (): void => {
-    setMessage(null);
+  const clearMessages = (): void => {
+    setMessages([]);
+  };
+
+  const addMessage = (newMessage: GlobalMessage): void => {
+    setMessages((messages) => {
+      const existingMessage = messages.find(
+        (message) => message.text === newMessage.text
+      );
+      if (!existingMessage) {
+        return [...messages, newMessage];
+      }
+      return messages;
+    });
+  };
+
+  const isLoading = (): boolean => {
+    return loaders > 0;
+  };
+
+  const addLoader = (): void => {
+    setLoaders(loaders + 1);
+  };
+
+  const finalizeLoader = (): void => {
+    setLoaders(loaders - 1);
   };
 
   return (
     <StatusContext.Provider
       value={{
-        message,
+        messages,
         isLoading,
-        setLoading,
-        setMessage,
-        clearMessage,
+        addLoader,
+        finalizeLoader,
+        addMessage,
+        clearMessages,
       }}
     >
       {children}

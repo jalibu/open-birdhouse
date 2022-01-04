@@ -6,7 +6,7 @@ import {
   TableRow,
   TableBody,
   TableCell,
-  Loading,
+  StructuredListSkeleton,
 } from "carbon-components-react";
 import { withTranslation } from "react-i18next";
 import ApiRequestService from "../Services/ApiRequestService";
@@ -37,20 +37,23 @@ const Statistics = ({ t }: { t: any }) => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await apiService.getStatistics();
-      setStatistics([
-        {
-          id: "visitors_today",
-          name: t("STATS.VISITORS_TODAY"),
-          value: response.visitors.todayCalls.toString(),
-        },
-        {
-          id: "visitors_yesterday",
-          name: t("STATS.VISITORS_YESTERDAY"),
-          value: response.visitors.yesterdayCalls.toString(),
-        },
-      ]);
+      if (response) {
+        setStatistics([
+          {
+            id: "visitors_today",
+            name: t("STATS.VISITORS_TODAY"),
+            value: response.visitors.todayCalls.toString(),
+          },
+          {
+            id: "visitors_yesterday",
+            name: t("STATS.VISITORS_YESTERDAY"),
+            value: response.visitors.yesterdayCalls.toString(),
+          },
+        ]);
+      }
     };
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [t]);
 
   return statistics.length > 0 ? (
@@ -83,8 +86,7 @@ const Statistics = ({ t }: { t: any }) => {
     </DataTable>
   ) : (
     <div>
-      <Loading withOverlay={false} />
-      {`${t("LOADING")} ${t("STATS.TITLE")}...`}
+      <StructuredListSkeleton />
     </div>
   );
 };

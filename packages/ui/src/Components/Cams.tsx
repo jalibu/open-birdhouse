@@ -1,28 +1,35 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Tabs, Tab, Loading } from "carbon-components-react";
+import {
+  Tabs,
+  Tab,
+  TabsSkeleton,
+  SkeletonPlaceholder,
+} from "carbon-components-react";
 import { withTranslation } from "react-i18next";
 import ApiRequestService from "../Services/ApiRequestService";
 import { Cam } from "@open-birdhouse/common";
 import spinner from "../spinner.svg";
 import StatusContext from "../Context/StatusContext/StatusContext";
 
-
 const Cams = ({ t }: { t: any }) => {
   const [cams, setCams] = useState<Cam[]>([]);
   const [activeCam, setActiveCam] = useState<number>(0);
-  
-  const statusContext = useContext(StatusContext)
+
+  const statusContext = useContext(StatusContext);
   const apiService = new ApiRequestService(statusContext);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await apiService.getCams();
-      setCams(response);
-      if (response.length > 0) {
-        setActiveCam(0);
+      if (response) {
+        setCams(response);
+        if (response.length > 0) {
+          setActiveCam(0);
+        }
       }
     };
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return cams.length > 0 ? (
@@ -52,8 +59,9 @@ const Cams = ({ t }: { t: any }) => {
     </Tabs>
   ) : (
     <div>
-      <Loading withOverlay={false} />
-      {`${t("LOADING")} ${t("CAMERAS.TITLE")}...`}
+      <p> {`${t("LOADING")} ${t("CAMERAS.TITLE")}...`}</p>
+      <TabsSkeleton />
+      <SkeletonPlaceholder />
     </div>
   );
 };

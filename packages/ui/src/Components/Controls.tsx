@@ -4,7 +4,8 @@ import {
   Toggle,
   Select,
   SelectItem,
-  Loading,
+  SelectSkeleton,
+  ToggleSmallSkeleton,
 } from "carbon-components-react";
 import { withTranslation } from "react-i18next";
 import ApiRequestService from "../Services/ApiRequestService";
@@ -24,9 +25,12 @@ const Controls = ({ t }: { t: any }) => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await apiService.getControls();
-      setControls(response);
+      if (response) {
+        setControls(response);
+      }
     };
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return controls ? (
@@ -99,8 +103,10 @@ const Controls = ({ t }: { t: any }) => {
     </FormGroup>
   ) : (
     <div>
-      <Loading withOverlay={false} />
-      {`${t("LOADING")} ${t("CONTROLS.TITLE")}...`}
+      <ToggleSmallSkeleton />
+      <ToggleSmallSkeleton />
+      <ToggleSmallSkeleton />
+      <SelectSkeleton />
     </div>
   );
 };

@@ -2,10 +2,11 @@ import { GlobalMessage, StatusContextType } from '@open-birdhouse/common'
 import React from 'react'
 
 const StatusContext = React.createContext<StatusContextType>({
-  message: {} as GlobalMessage | null | undefined,
-  isLoading: false,
-  setLoading: () => null,
-  setMessage: () => null,
-  clearMessage: () => null,
+  messages: [] as GlobalMessage[],
+  isLoading: () => false,
+  addLoader: () => null,
+  finalizeLoader: () => null,
+  addMessage: () => null,
+  clearMessages: () => null,
 })
 export default StatusContext
