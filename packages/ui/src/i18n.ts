@@ -15,7 +15,7 @@ const resources = {
       },
       CAMERAS: {
         TITLE: "Cameras",
-        LIVE_FEED: "Camera live feed"
+        LIVE_FEED: "live feed"
       },
       STATS: {
         TITLE: "Statistics",
@@ -52,7 +52,7 @@ const resources = {
       },
       CAMERAS: {
         TITLE: "Kameras",
-        LIVE_FEED: "Kamera live Übertragung"
+        LIVE_FEED: "live Übertragung"
       },
       STATS: {
         TITLE: "Statistik",

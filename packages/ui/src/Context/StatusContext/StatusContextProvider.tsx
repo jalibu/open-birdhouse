@@ -1,4 +1,4 @@
-import { GlobalMessage } from "@open-birdhouse/common";
+import { GlobalMessage } from "../../Models/GlobalMessage";
 import React, { useState } from "react";
 import StatusContext from "./StatusContext";
 

@@ -1,6 +1,5 @@
-export * from "./models/ControlsStatus";
-export * from "./models/Video";
-export * from "./models/Statistics";
-export * from "./models/Cam";
-export * from "./models/GlobalMessage"
-export * from "./models/StatusContextType"
+
+export * from "./models/api/ControlsStatus";
+export * from "./models/api/Video";
+export * from "./models/api/Statistics";
+export * from "./models/api/Cam";

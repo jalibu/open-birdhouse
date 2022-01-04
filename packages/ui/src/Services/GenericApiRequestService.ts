@@ -1,4 +1,4 @@
-import { StatusContextType } from "@open-birdhouse/common";
+import { StatusContextType } from "../Models/StatusContextType";
 
 export default class GenericApiRequestService {
   private statusContext: StatusContextType;
@@ -21,7 +21,6 @@ export default class GenericApiRequestService {
     options: RequestInit,
     isJson = false,
     showLoader = true
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ): Promise<T | null> => {
     let response;
     try {
@@ -46,7 +45,6 @@ export default class GenericApiRequestService {
         });
       }
 
-      // eslint-disable-next-line no-console
       console.warn(err.message);
     } finally {
       if (showLoader) this.statusContext.finalizeLoader();

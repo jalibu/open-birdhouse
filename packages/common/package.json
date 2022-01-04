@@ -9,5 +9,8 @@
     "test": "echo \"todo\""
   },
   "author": "jan.litzenburger@gmail.com",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "class-validator": "^0.13.2"
+  }
 }

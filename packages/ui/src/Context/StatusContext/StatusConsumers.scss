@@ -1,0 +1,11 @@
+.globalNotificationWrapper {
+    position: fixed !important;
+    z-index: 10000;
+    margin-top: 2em !important;
+    left: 50%;
+}
+
+.globalNotification{
+      transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+  }

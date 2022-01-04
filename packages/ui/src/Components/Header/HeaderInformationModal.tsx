@@ -20,6 +20,7 @@ export default function HeaderInformationModal({
     >
       <div className="bx--modal-content__text">
         <h5>Open Birdhouse</h5>
+        <p>Version {process.env.REACT_APP_VERSION}</p>
         <p>MIT licensed</p>
         <p>
           © 2022 <Link target="_blank" href="https://github.com/jalibu/open-birdhouse">Jalibu</Link>

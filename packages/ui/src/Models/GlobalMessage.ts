@@ -4,6 +4,5 @@ export type GlobalMessage = {
   title?: string;
   requestId?: string;
   kind?: NotificationKind;
-  /* eslint-disable-next-line */
   actions?: any;
 };

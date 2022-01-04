@@ -57,18 +57,22 @@ const Cams = ({ t }: { t: any }) => {
                 minHeight: "240px",
                 maxHeight: "600px",
                 maxWidth: "100%",
-                background: "url(placeholder.jpeg) no-repeat scroll 0 0",
               }}
               alt={cam.name}
             />
+            {waitForCam && (
+              <>
+                <InlineLoading
+                  className="liveFeedLoader"
+                  description={`${t("LOADING")} ${cam.name} ${t(
+                    "CAMERAS.LIVE_FEED"
+                  )}...`}
+                />
+              </>
+            )}
           </Tab>
         ))}
       </Tabs>
-      {waitForCam && (
-        <>
-          <InlineLoading className="liveFeedLoader" description={`${t("LOADING")} ${t("CAMERAS.LIVE_FEED")}...`} />
-        </>
-      )}
     </section>
   ) : (
     <section>

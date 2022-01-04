@@ -1,4 +1,5 @@
-import { GlobalMessage, StatusContextType } from '@open-birdhouse/common'
+import { GlobalMessage } from '../../Models/GlobalMessage'
+import { StatusContextType } from '../../Models/StatusContextType'
 import React from 'react'
 
 const StatusContext = React.createContext<StatusContextType>({
