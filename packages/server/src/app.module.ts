@@ -7,6 +7,8 @@ import { GalleryController } from './gallery.controller';
 import { GalleryService } from './gallery.service';
 import { StatisticsController } from './statistics.controller';
 import { StatisticsService } from './statistics.service';
+import { WeatherController } from './weather.controller';
+import { WeatherService } from './weather.service';
 
 @Module({
   imports: [],
@@ -15,7 +17,14 @@ import { StatisticsService } from './statistics.service';
     ControlsController,
     GalleryController,
     StatisticsController,
+    WeatherController,
   ],
-  providers: [CamsService, ControlsService, GalleryService, StatisticsService],
+  providers: [
+    CamsService,
+    ControlsService,
+    GalleryService,
+    StatisticsService,
+    WeatherService,
+  ],
 })
 export class AppModule {}

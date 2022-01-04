@@ -26,6 +26,7 @@
     "@nestjs/platform-express": "^8.0.0",
     "@open-birdhouse/common": "^1.0.0",
     "dotenv-flow": "^3.2.0",
+    "openweather-api-node": "^1.1.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rpio": "^2.4.2",

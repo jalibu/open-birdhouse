@@ -37,6 +37,17 @@ export default class ApiRequestService extends GenericApiRequestService {
     );
   }
 
+  async getWeather(): Promise<any> {
+    return await this.doFetch<Statistics>(
+      `${REACT_APP_API_URL}/api/weather`,
+      {
+        headers: this.getHeaders(),
+      },
+      true,
+      true
+    );
+  }
+
   async getControls(): Promise<ControlsStatus | null> {
     return await this.doFetch<ControlsStatus>(
       `${REACT_APP_API_URL}/api/controls`,

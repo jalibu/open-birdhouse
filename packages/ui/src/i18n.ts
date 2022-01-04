@@ -24,6 +24,9 @@ const resources = {
         BIRDS_TODAY: "Birds today",
         BIRDS_YESTERDAY: "Birds yesterday",
       },
+      WEATHER:{
+        TITLE: "Weather"
+      },
       CONTROLS: {
         TITLE: "Controls",
         ON: "on",

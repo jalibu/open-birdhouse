@@ -9,6 +9,8 @@ import {
 import { Information20 } from "@carbon/icons-react";
 import { withTranslation } from "react-i18next";
 import HeaderInformationModal from "./HeaderInformationModal";
+import Weather from "../Weather";
+import "./Header.scss";
 
 const PageHeader = ({ t }: { t: any }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -19,6 +21,7 @@ const PageHeader = ({ t }: { t: any }) => {
       </HeaderName>
       <HeaderNavigation aria-label={t("TITLE_BIRDHOUSE")} />
       <HeaderGlobalBar>
+        <Weather />
         <HeaderGlobalAction
           aria-label="Search"
           onClick={() => {
