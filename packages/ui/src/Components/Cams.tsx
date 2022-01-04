@@ -4,16 +4,17 @@ import {
   Tab,
   TabsSkeleton,
   SkeletonPlaceholder,
+  InlineLoading,
 } from "carbon-components-react";
 import { withTranslation } from "react-i18next";
 import ApiRequestService from "../Services/ApiRequestService";
 import { Cam } from "@open-birdhouse/common";
-import spinner from "../spinner.svg";
 import StatusContext from "../Context/StatusContext/StatusContext";
 
 const Cams = ({ t }: { t: any }) => {
   const [cams, setCams] = useState<Cam[]>([]);
   const [activeCam, setActiveCam] = useState<number>(0);
+  const [waitForCam, setWaitForCam] = useState<boolean>(false);
 
   const statusContext = useContext(StatusContext);
   const apiService = new ApiRequestService(statusContext);
@@ -26,43 +27,55 @@ const Cams = ({ t }: { t: any }) => {
         if (response.length > 0) {
           setActiveCam(0);
         }
+        setWaitForCam(true);
       }
     };
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return cams.length > 0 ? (
-    <Tabs
-      onSelectionChange={(tabIndex) => {
-        setActiveCam(tabIndex);
-      }}
-    >
-      {cams.map((cam, camIndex) => (
-        <Tab
-          id={`tab-cam-${cam.id}`}
-          key={`tab-cam-${cam.id}`}
-          label={cam.name}
-        >
-          <img
-            src={camIndex === activeCam ? cam.url : spinner}
-            style={{
-              minHeight: "240px",
-              maxHeight: "600px",
-              maxWidth: "100%",
-              background: "url(placeholder.jpeg) no-repeat scroll 0 0",
-            }}
-            alt={cam.name}
-          />
-        </Tab>
-      ))}
-    </Tabs>
+    <section>
+      <Tabs
+        onSelectionChange={(tabIndex) => {
+          setActiveCam(tabIndex);
+          setWaitForCam(true);
+        }}
+      >
+        {cams.map((cam, camIndex) => (
+          <Tab
+            id={`tab-cam-${cam.id}`}
+            key={`tab-cam-${cam.id}`}
+            label={cam.name}
+          >
+            <img
+              src={camIndex === activeCam ? cam.url : ""}
+              onLoad={() => {
+                setWaitForCam(false);
+              }}
+              style={{
+                minHeight: "240px",
+                maxHeight: "600px",
+                maxWidth: "100%",
+                background: "url(placeholder.jpeg) no-repeat scroll 0 0",
+              }}
+              alt={cam.name}
+            />
+          </Tab>
+        ))}
+      </Tabs>
+      {waitForCam && (
+        <>
+          <InlineLoading className="liveFeedLoader" description={`${t("LOADING")} ${t("CAMERAS.LIVE_FEED")}...`} />
+        </>
+      )}
+    </section>
   ) : (
-    <div>
+    <section>
       <p> {`${t("LOADING")} ${t("CAMERAS.TITLE")}...`}</p>
       <TabsSkeleton />
       <SkeletonPlaceholder />
-    </div>
+    </section>
   );
 };
 

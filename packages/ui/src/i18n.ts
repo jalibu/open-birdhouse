@@ -14,12 +14,15 @@ const resources = {
         CAMERAS: "Cameras",
       },
       CAMERAS: {
-        TITLE: "Cameras"
+        TITLE: "Cameras",
+        LIVE_FEED: "Camera live feed"
       },
       STATS: {
         TITLE: "Statistics",
-        VISITORS_TODAY: "Visitors today",
-        VISITORS_YESTERDAY: "Visitors yesterday",
+        VISITORS_TODAY: "Page visits today",
+        VISITORS_YESTERDAY: "Page visits yesterday",
+        BIRDS_TODAY: "Birds today",
+        BIRDS_YESTERDAY: "Birds yesterday",
       },
       CONTROLS: {
         TITLE: "Controls",
@@ -48,12 +51,15 @@ const resources = {
         CAMERAS: "Kameras",
       },
       CAMERAS: {
-        TITLE: "Kameras"
+        TITLE: "Kameras",
+        LIVE_FEED: "Kamera live Übertragung"
       },
       STATS: {
         TITLE: "Statistik",
-        VISITORS_TODAY: "Besucher heute",
-        VISITORS_YESTERDAY: "Besucher gestern",
+        VISITORS_TODAY: "Seitenaufrufe heute",
+        VISITORS_YESTERDAY: "Seitenaufrufe gestern",
+        BIRDS_TODAY: "Vögel heute",
+        BIRDS_YESTERDAY: "Vögel gestern",
       },
       CONTROLS: {
         TITLE: "Steuerung",

@@ -31,11 +31,15 @@ export default function StatusContextProvider({
   };
 
   const addLoader = (): void => {
-    setLoaders(loaders + 1);
+    setLoaders((loaders) => {
+      return loaders + 1;
+    });
   };
 
   const finalizeLoader = (): void => {
-    setLoaders(loaders - 1);
+    setLoaders((loaders) => {
+      return loaders - 1 < 0 ? 0 : loaders - 1;
+    });
   };
 
   return (

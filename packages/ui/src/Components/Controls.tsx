@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
-  FormGroup,
   Toggle,
   Select,
   SelectItem,
@@ -30,11 +29,12 @@ const Controls = ({ t }: { t: any }) => {
       }
     };
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return controls ? (
-    <FormGroup legendText={t("CONTROLS.TITLE")}>
+    <section>
+      <h6>{t("CONTROLS.TITLE")}</h6>
       <Toggle
         id="toggle-outdoor-light"
         toggled={controls.outdoorLightOn}
@@ -100,14 +100,15 @@ const Controls = ({ t }: { t: any }) => {
         <SelectItem text={t("CONTROLS.COLORS.CYAN")} value="CYAN" />
         <SelectItem text={t("CONTROLS.COLORS.MAGENTA")} value="MAGENTA" />
       </Select>
-    </FormGroup>
+    </section>
   ) : (
-    <div>
+    <section>
+      <h6>{t("CONTROLS.TITLE")}</h6>
       <ToggleSmallSkeleton />
       <ToggleSmallSkeleton />
       <ToggleSmallSkeleton />
       <SelectSkeleton />
-    </div>
+    </section>
   );
 };
 
