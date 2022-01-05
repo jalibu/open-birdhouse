@@ -5,7 +5,7 @@
     "lerna": "^4.0.0"
   },
   "scripts": {
-    "build:ui": "cd packages/ui && yarn && yarn build"
+    "build:ui": "cd packages/common && yarn && yarn build && cd .. && cd ui && yarn && yarn build"
   },
   "workspaces": [
     "packages/*"
