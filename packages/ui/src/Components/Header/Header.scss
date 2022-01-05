@@ -1,6 +1,9 @@
 .weather-header-action{
     width: unset;
-    color: #fff;
+}
+
+.weather-header-action svg{
+   fill: #fff;
 }
 
 .weather-header-current {
@@ -9,4 +12,6 @@
 
 .weather-header-current {
     margin-left: 6px;
+    font-size: small;
+    color: #fff;
 }

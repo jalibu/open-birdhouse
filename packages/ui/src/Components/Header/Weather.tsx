@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
-import { HeaderGlobalAction, TooltipIcon } from "carbon-components-react";
+import { TooltipIcon } from "carbon-components-react";
 import { withTranslation } from "react-i18next";
-import ApiRequestService from "../Services/ApiRequestService";
-import StatusContext from "../Context/StatusContext/StatusContext";
+import ApiRequestService from "../../Services/ApiRequestService";
+import StatusContext from "../../Context/StatusContext/StatusContext";
 import {
   Cloud20,
   Cloudy20,
@@ -25,7 +25,6 @@ const Weather = ({ t }: { t: any }) => {
       const response = await apiService.getWeather();
       if (response) {
         setWeather(response);
-        console.log(response);
       }
     };
     fetchData();
@@ -59,13 +58,14 @@ const Weather = ({ t }: { t: any }) => {
   };
 
   return weather ? (
-    <TooltipIcon tooltipText={weather.weather.description}>
-      <HeaderGlobalAction className="weather-header-action">
-        {weatherIcon(weather.weather.icon)}
-        <span className="weather-header-current">
-          {weather.weather.temp.cur.toFixed(0)}°C
-        </span>
-      </HeaderGlobalAction>
+    <TooltipIcon
+      tooltipText={weather.weather.description}
+      className="bx--header__action weather-header-action"
+    >
+      {weatherIcon(weather.weather.icon)}
+      <span className="weather-header-current">
+        {weather.weather.temp.cur.toFixed(0)}°C
+      </span>
     </TooltipIcon>
   ) : null;
 };

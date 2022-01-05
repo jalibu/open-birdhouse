@@ -3169,6 +3169,13 @@
   resolved "https://registry.yarnpkg.com/@types/retry/-/retry-0.12.1.tgz#d8f1c0d0dc23afad6dc16a9e993a0865774b4065"
   integrity sha512-xoDlM2S4ortawSWORYqsdU+2rxdh4LRW9ytc3zmT37RIKQh6IHyKwwtKhKis9ah8ol07DCkZxPt8BBvPjC6v4g==
 
+"@types/rpio@^2.4.2":
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/@types/rpio/-/rpio-2.4.2.tgz#60ecb391eaf537a419e6386eec632f8507113192"
+  integrity sha512-ZUHmw033ONDzqMmAIY7qiq4Reb5WToSUPf70GlggBK6LgtlA2lLtHAot+Y4NxDWhGNoAMcKiWl9b/U1gXckOtw==
+  dependencies:
+    "@types/node" "*"
+
 "@types/scheduler@*":
   version "0.16.2"
   resolved "https://registry.yarnpkg.com/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"

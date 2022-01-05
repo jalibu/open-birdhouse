@@ -9,7 +9,7 @@ import {
 import { Information20 } from "@carbon/icons-react";
 import { withTranslation } from "react-i18next";
 import HeaderInformationModal from "./HeaderInformationModal";
-import Weather from "../Weather";
+import Weather from "./Weather";
 import "./Header.scss";
 
 const PageHeader = ({ t }: { t: any }) => {
@@ -23,7 +23,7 @@ const PageHeader = ({ t }: { t: any }) => {
       <HeaderGlobalBar>
         <Weather />
         <HeaderGlobalAction
-          aria-label="Search"
+          aria-label="Info"
           onClick={() => {
             setIsModalOpen(true);
           }}

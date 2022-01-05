@@ -8,16 +8,20 @@ import {
 } from "carbon-components-react";
 import { withTranslation } from "react-i18next";
 import ApiRequestService from "../Services/ApiRequestService";
-import { ControlsStatus } from "@open-birdhouse/common";
+import {
+  GenericControl,
+  RgbLedControl,
+  SwitchControl,
+} from "@open-birdhouse/common";
 import StatusContext from "../Context/StatusContext/StatusContext";
 
 const Controls = ({ t }: { t: any }) => {
-  const [controls, setControls] = useState<ControlsStatus>();
+  const [controls, setControls] = useState<GenericControl[]>();
 
   const statusContext = useContext(StatusContext);
   const apiService = new ApiRequestService(statusContext);
 
-  const postControls = async (controls: ControlsStatus) => {
+  const postControls = async (controls: GenericControl[]) => {
     apiService.setControls(controls);
   };
 
@@ -35,71 +39,72 @@ const Controls = ({ t }: { t: any }) => {
   return controls ? (
     <section>
       <h6>{t("CONTROLS.TITLE")}</h6>
-      <Toggle
-        id="toggle-outdoor-light"
-        toggled={controls.outdoorLightOn}
-        labelA={`${t("CONTROLS.OUTDOOR_LIGHT")}  ${t("CONTROLS.OFF")}`}
-        labelB={`${t("CONTROLS.OUTDOOR_LIGHT")}  ${t("CONTROLS.ON")}`}
-        onToggle={(toggled) => {
-          const newControls = {
-            ...controls,
-            outdoorLightOn: toggled,
-          };
-          setControls(newControls);
-          postControls(newControls);
-        }}
-      />
-      <Toggle
-        id="toggle-nightvision"
-        toggled={controls.nightVisionOn}
-        labelA={`${t("CONTROLS.NIGHTVISION")}  ${t("CONTROLS.OFF")}`}
-        labelB={`${t("CONTROLS.NIGHTVISION")}  ${t("CONTROLS.ON")}`}
-        onToggle={(toggled) => {
-          const newControls = {
-            ...controls,
-            nightVisionOn: toggled,
-          };
-          setControls(newControls);
-          postControls(newControls);
-        }}
-      />
-      <Toggle
-        id="toggle-room-light"
-        toggled={controls.roomLightOn}
-        labelA={`${t("CONTROLS.ROOM_LIGHT")}  ${t("CONTROLS.OFF")}`}
-        labelB={`${t("CONTROLS.ROOM_LIGHT")}  ${t("CONTROLS.ON")}`}
-        onToggle={(toggled) => {
-          const newControls = {
-            ...controls,
-            roomLightOn: toggled,
-          };
-          setControls(newControls);
-          postControls(newControls);
-        }}
-      />
-      <Select
-        value={controls.roomLightColor}
-        helperText={t("CONTROLS.ROOM_LIGHT_COLOR")}
-        id="room-light-color-select"
-        invalidText="A valid value is required"
-        labelText=""
-        onChange={(evt) => {
-          const newControls = {
-            ...controls,
-            roomLightColor: evt.currentTarget.value,
-          };
+      {controls.map((control) => {
+        if (control.type === "SWITCH") {
+          const switchControl = control as SwitchControl;
+          return (
+            <Toggle
+              id={`toggle-${switchControl.id}`}
+              key={`toggle-${switchControl.id}`}
+              toggled={switchControl.isOn}
+              labelA={`${switchControl.name}  ${t("CONTROLS.OFF")}`}
+              labelB={`${switchControl.name}   ${t("CONTROLS.ON")}`}
+              onToggle={(toggled) => {
+                switchControl.isOn = toggled;
+                const newControls = [...controls];
+                setControls(newControls);
+                postControls(newControls);
+              }}
+            />
+          );
+        } else if (control.type === "RGB_LED") {
+          const rgbLedControl = control as RgbLedControl;
+          return (
+            <div key={`div-${rgbLedControl.id}`}>
+              <Toggle
+                id={`toggle-${rgbLedControl.id}`}
+                key={`toggle-${rgbLedControl.id}`}
+                toggled={rgbLedControl.isOn}
+                labelA={`${rgbLedControl.name}  ${t("CONTROLS.OFF")}`}
+                labelB={`${rgbLedControl.name}  ${t("CONTROLS.ON")}`}
+                onToggle={(toggled) => {
+                  rgbLedControl.isOn = toggled;
+                  const newControls = [...controls];
+                  setControls(newControls);
+                  postControls(newControls);
+                }}
+              />
+              <Select
+                id={`select-${rgbLedControl.id}`}
+                value={rgbLedControl.color}
+                helperText={t("CONTROLS.ROOM_LIGHT_COLOR")}
+                key={`select-${rgbLedControl.id}`}
+                invalidText="A valid value is required"
+                labelText=""
+                onChange={(evt) => {
+                  rgbLedControl.color = evt.currentTarget.value;
+                  const newControls = [...controls];
 
-          setControls(newControls);
-          postControls(newControls);
-        }}
-      >
-        <SelectItem text={t("CONTROLS.COLORS.WHITE")} value="WHITE" />
-        <SelectItem text={t("CONTROLS.COLORS.RED")} value="RED" />
-        <SelectItem text={t("CONTROLS.COLORS.GREEN")} value="GREEN" />
-        <SelectItem text={t("CONTROLS.COLORS.BLUE")} value="BLUE" />
-        <SelectItem text={t("CONTROLS.COLORS.CYAN")} value="CYAN" />
-        <SelectItem text={t("CONTROLS.COLORS.MAGENTA")} value="MAGENTA" />
-      </Select>
+                  setControls(newControls);
+                  postControls(newControls);
+                }}
+              >
+                <SelectItem text={t("CONTROLS.COLORS.WHITE")} value="WHITE" />
+                <SelectItem text={t("CONTROLS.COLORS.RED")} value="RED" />
+                <SelectItem text={t("CONTROLS.COLORS.GREEN")} value="GREEN" />
+                <SelectItem text={t("CONTROLS.COLORS.BLUE")} value="BLUE" />
+                <SelectItem text={t("CONTROLS.COLORS.CYAN")} value="CYAN" />
+                <SelectItem
+                  text={t("CONTROLS.COLORS.MAGENTA")}
+                  value="MAGENTA"
+                />
+              </Select>
+            </div>
+          );
+        } else {
+          return null;
+        }
+      })}
     </section>
   ) : (
     <section>
