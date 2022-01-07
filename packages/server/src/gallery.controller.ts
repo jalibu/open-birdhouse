@@ -9,4 +9,9 @@ export class GalleryController {
   getGalery(): any {
     return this.galleryService.getGalery();
   }
+
+  @Get('/api/galery/refresh')
+  updateGalery(): any {
+    return this.galleryService.updateGalery();
+  }
 }
