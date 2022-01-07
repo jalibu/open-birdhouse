@@ -17,6 +17,10 @@ const resources = {
         TITLE: "Cameras",
         LIVE_FEED: "live feed"
       },
+      GALLERY: {
+        TITLE: "Galery",
+        TAGS: "AI generated tags"
+      },
       STATS: {
         TITLE: "Statistics",
         VISITORS_TODAY: "Page visits today",

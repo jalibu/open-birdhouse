@@ -1,4 +1,9 @@
-import { Cam, GenericControl, Statistics } from "@open-birdhouse/common";
+import {
+  Cam,
+  GenericControl,
+  Statistics,
+  VideoApiResponse,
+} from "@open-birdhouse/common";
 import GenericApiRequestService from "./GenericApiRequestService";
 
 const REACT_APP_API_URL = process.env.REACT_APP_API_URL || "";
@@ -51,6 +56,17 @@ export default class ApiRequestService extends GenericApiRequestService {
   async getControls(): Promise<GenericControl[] | null> {
     return await this.doFetch<GenericControl[]>(
       `${REACT_APP_API_URL}/api/controls`,
+      {
+        headers: this.getHeaders(),
+      },
+      true,
+      true
+    );
+  }
+
+  async getGalery(): Promise<VideoApiResponse | null> {
+    return await this.doFetch<VideoApiResponse>(
+      `${REACT_APP_API_URL}/api/galery`,
       {
         headers: this.getHeaders(),
       },

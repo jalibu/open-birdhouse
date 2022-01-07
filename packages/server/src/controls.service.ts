@@ -18,8 +18,6 @@ export class ControlsService {
         this.controls.push(new SwitchControl(entry));
       }
     });
-
-    console.log('controls', this.controls);
   }
 
   private stripDownControls() {

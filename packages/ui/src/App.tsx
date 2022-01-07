@@ -11,6 +11,7 @@ import {
   GlobalLoadingNotification,
   GlobalNotification,
 } from "./Context/StatusContext/StatusConsumers";
+import Gallery from "./Components/Gallery";
 
 const App = ({ t }: { t: any }) => (
   <div className="container">
@@ -21,6 +22,7 @@ const App = ({ t }: { t: any }) => (
       <Content className="page-content">
         <Cams />
         <Controls />
+        <Gallery />
         <Statistics />
       </Content>
     </StatusContextProvider>
