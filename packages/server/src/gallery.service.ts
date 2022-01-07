@@ -33,7 +33,6 @@ export class GalleryService {
       Number(dateParts[2]),
       Number(dateParts[3]) + 1,
       Number(dateParts[4]),
-      Number(dateParts[5]),
     );
     const video: Video = {
       id: id,
