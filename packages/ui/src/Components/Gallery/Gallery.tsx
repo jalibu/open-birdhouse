@@ -1,19 +1,23 @@
-import React, { useState, useEffect, useContext } from "react";
-import {
-  Tag,
-  TooltipIcon,
-} from "carbon-components-react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  Dispatch,
+  SetStateAction,
+} from "react";
+import { Tag, TooltipIcon } from "carbon-components-react";
 import "./Gallery.scss";
 import { withTranslation } from "react-i18next";
-import ApiRequestService from "../Services/ApiRequestService";
-import StatusContext from "../Context/StatusContext/StatusContext";
+import ApiRequestService from "../../Services/ApiRequestService";
+import StatusContext from "../../Context/StatusContext/StatusContext";
 import { Video, VideoApiResponse } from "@open-birdhouse/common";
 import { Translation } from "react-i18next";
-import {
-  Information16,
-} from "@carbon/icons-react";
+import { Information16 } from "@carbon/icons-react";
+import GalleryModal from "./GalleryModal";
 
 const Gallery = ({ t }: { t: any }) => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [modalVideo, setModalVideo] = useState<Video>();
   const statusContext = useContext(StatusContext);
   const apiService = new ApiRequestService(statusContext);
   const [galery, setGalery] = useState<VideoApiResponse>();
@@ -48,15 +52,35 @@ const Gallery = ({ t }: { t: any }) => {
               key={`gallery-entry-${video.id}`}
               uri={galery.uri}
               video={video}
+              setIsModalOpen={setIsModalOpen}
+              setModalVideo={setModalVideo}
             />
           ))}
         </div>
       </div>
+      <GalleryModal
+        uri={galery.uri}
+        isOpened={isModalOpen}
+        modalVideo={modalVideo}
+        handleClose={(): void => {
+          setIsModalOpen(false);
+        }}
+      />
     </section>
-  ) : null
+  ) : null;
 };
 
-const GaleryEntry = ({ uri, video }: { uri: string; video: Video }) => {
+const GaleryEntry = ({
+  uri,
+  video,
+  setIsModalOpen,
+  setModalVideo,
+}: {
+  uri: string;
+  video: Video;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  setModalVideo: Dispatch<SetStateAction<Video | undefined>>;
+}) => {
   return (
     <div
       key={`wrap-${video.id}`}
@@ -67,6 +91,10 @@ const GaleryEntry = ({ uri, video }: { uri: string; video: Video }) => {
         className="gallery-image"
         src={`${uri}/${video.imageUrl}`}
         alt={video.imageUrl}
+        onClick={() => {
+          setIsModalOpen(true);
+          setModalVideo(video);
+        }}
       />
       {video.annotations && (
         <div className="gallery-tags">

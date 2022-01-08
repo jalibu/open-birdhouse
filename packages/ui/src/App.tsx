@@ -11,7 +11,7 @@ import {
   GlobalLoadingNotification,
   GlobalNotification,
 } from "./Context/StatusContext/StatusConsumers";
-import Gallery from "./Components/Gallery";
+import Gallery from "./Components/Gallery/Gallery";
 
 const App = ({ t }: { t: any }) => (
   <div className="container">

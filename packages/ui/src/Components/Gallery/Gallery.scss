@@ -1,5 +1,6 @@
 .gallery-image {
   width: 100%;
+  cursor: pointer;
 }
 
 .gallery-col {
@@ -12,4 +13,12 @@
 .gallery-date {
   font-size: smaller;
   margin-right: 0.5em;
+}
+
+.gallery-modal .bx--modal-container{
+  width: unset;
+}
+
+.gallery-modal img {
+  max-width: 100%;
 }
