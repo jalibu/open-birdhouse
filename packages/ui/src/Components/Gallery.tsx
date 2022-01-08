@@ -68,7 +68,7 @@ const GaleryEntry = ({ uri, video }: { uri: string; video: Video }) => {
         src={`${uri}/${video.imageUrl}`}
         alt={video.imageUrl}
       />
-      {video.metadata && (
+      {video.annotations && (
         <div className="gallery-tags">
           <span className="gallery-date">
             {(() => {
@@ -76,9 +76,9 @@ const GaleryEntry = ({ uri, video }: { uri: string; video: Video }) => {
               return date.toLocaleString();
             })()}
           </span>
-          {video?.metadata?.map((metadata) => (
-            <Tag key={`tag-${video.id}-${metadata.name}`} type="blue">
-              {metadata.name}
+          {video?.annotations?.map((annotation) => (
+            <Tag key={`tag-${video.id}-${annotation.name}`} type="blue">
+              {annotation.name}
             </Tag>
           ))}
         </div>
