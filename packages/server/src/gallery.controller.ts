@@ -5,12 +5,12 @@ import { GalleryService } from './gallery.service';
 export class GalleryController {
   constructor(private readonly galleryService: GalleryService) {}
 
-  @Get('/api/galery')
+  @Get('/api/gallery')
   getGalery(): any {
     return this.galleryService.getGalery();
   }
 
-  @Get('/api/galery/refresh')
+  @Get('/api/gallery/refresh')
   updateGalery(): any {
     return this.galleryService.updateGalery();
   }

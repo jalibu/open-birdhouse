@@ -3,8 +3,9 @@ export type Video = {
   imageUrl: string;
   videoUrl: string;
   date?: Date;
+  filesize?: number,
   lengthInSeconds?: number;
-  metadata?: any[]
+  annotations?: annotation[];
 };
 
 export type VideoApiResponse = {
@@ -12,6 +13,7 @@ export type VideoApiResponse = {
   videos: Video[];
 };
 
-type metdadata = {
+type annotation = {
   name: string;
+  score: number;
 };

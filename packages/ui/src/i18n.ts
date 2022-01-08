@@ -18,8 +18,8 @@ const resources = {
         LIVE_FEED: "live feed"
       },
       GALLERY: {
-        TITLE: "Galery",
-        TAGS: "AI generated tags"
+        TITLE: "Gallery",
+        TAGS: "These tags were automatically created by AI with object recognition"
       },
       STATS: {
         TITLE: "Statistics",
@@ -61,12 +61,16 @@ const resources = {
         TITLE: "Kameras",
         LIVE_FEED: "live Übertragung"
       },
+      GALLERY: {
+        TITLE: "Galerie",
+        TAGS: "Diese Tags wurden automatisch durch KI unterstütze Bilderkennung ermittelt"
+      },
       STATS: {
         TITLE: "Statistik",
         VISITORS_TODAY: "Seitenaufrufe heute",
         VISITORS_YESTERDAY: "Seitenaufrufe gestern",
-        BIRDS_TODAY: "Vögel heute",
-        BIRDS_YESTERDAY: "Vögel gestern",
+        BIRDS_TODAY: "Tiere heute",
+        BIRDS_YESTERDAY: "Tiere gestern",
       },
       CONTROLS: {
         TITLE: "Steuerung",

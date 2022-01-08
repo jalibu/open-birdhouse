@@ -66,7 +66,7 @@ export default class ApiRequestService extends GenericApiRequestService {
 
   async getGalery(): Promise<VideoApiResponse | null> {
     return await this.doFetch<VideoApiResponse>(
-      `${REACT_APP_API_URL}/api/galery`,
+      `${REACT_APP_API_URL}/api/gallery`,
       {
         headers: this.getHeaders(),
       },
