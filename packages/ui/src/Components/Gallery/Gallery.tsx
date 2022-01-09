@@ -5,14 +5,13 @@ import React, {
   Dispatch,
   SetStateAction,
 } from "react";
-import { Tag, TooltipIcon } from "carbon-components-react";
+import { Tag } from "carbon-components-react";
 import "./Gallery.scss";
 import { withTranslation } from "react-i18next";
 import ApiRequestService from "../../Services/ApiRequestService";
 import StatusContext from "../../Context/StatusContext/StatusContext";
 import { Video, VideoApiResponse } from "@open-birdhouse/common";
 import { Translation } from "react-i18next";
-import { Information16 } from "@carbon/icons-react";
 import GalleryModal from "./GalleryModal";
 
 const Gallery = ({ t }: { t: any }) => {
@@ -35,21 +34,18 @@ const Gallery = ({ t }: { t: any }) => {
 
   return galery && galery?.videos?.length > 0 ? (
     <section>
-      <h6>
-        {t("GALLERY.TITLE")}
-        <Translation>
-          {(t) => (
-            <TooltipIcon tooltipText={`${t("GALLERY.TAGS")}`}>
-              <Information16 />{" "}
-            </TooltipIcon>
-          )}
-        </Translation>
-      </h6>
+      <Translation>
+        {(t) => (
+          <>
+            <h6>{t("GALLERY.TITLE")}</h6>
+          </>
+        )}
+      </Translation>
       <div className="gallery-grid bx--grid">
         <div className="bx--row">
           {galery.videos.map((video) => (
             <GaleryEntry
-              key={`gallery-entry-${video.id}`}
+              key={`gallery-entry-${video.id}-${video.filesize}`}
               uri={galery.uri}
               video={video}
               setIsModalOpen={setIsModalOpen}
@@ -83,11 +79,11 @@ const GaleryEntry = ({
 }) => {
   return (
     <div
-      key={`wrap-${video.id}`}
+      key={`wrap-${video.id}-${video.filesize}`}
       className="gallery-col bx--col-lg-4 bx--col-md-2 bx--col-sm-2"
     >
       <img
-        key={`img-${video.id}`}
+        key={`img-${video.id}-${video.filesize}`}
         className="gallery-image"
         src={`${uri}/${video.imageUrl}`}
         alt={video.imageUrl}
@@ -96,21 +92,23 @@ const GaleryEntry = ({
           setModalVideo(video);
         }}
       />
-      {video.annotations && (
-        <div className="gallery-tags">
-          <span className="gallery-date">
-            {(() => {
-              const date = new Date(`${video.date}`);
-              return date.toLocaleString();
-            })()}
-          </span>
-          {video?.annotations?.map((annotation) => (
-            <Tag key={`tag-${video.id}-${annotation.name}`} type="blue">
+      <div className="gallery-tags">
+        <span className="gallery-date">
+          {(() => {
+            const date = new Date(`${video.date}`);
+            return date.toLocaleString();
+          })()}
+        </span>
+        {process.env.REACT_APP_SHOW_ANNOTATIONS === "true" &&
+          video?.annotations?.map((annotation, index) => (
+            <Tag
+              key={`tag-${video.id}-${video.filesize}-${annotation.name}-${index}`}
+              type="blue"
+            >
               {annotation.name}
             </Tag>
           ))}
-        </div>
-      )}
+      </div>
     </div>
   );
 };
