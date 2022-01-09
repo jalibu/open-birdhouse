@@ -12,8 +12,8 @@ export default function GalleryModal({
   handleClose: () => void;
   modalVideo: Video | undefined;
   uri: string;
-}): JSX.Element {
-  return (
+}): JSX.Element | null {
+  return modalVideo ? (
     <Modal
       className="gallery-modal"
       iconDescription="Close"
@@ -25,7 +25,7 @@ export default function GalleryModal({
       onRequestClose={handleClose}
       open={isOpened}
       passiveModal
-      size="sm"
+      size="md"
     >
       <div className="bx--modal-content__text">
         <img src={`${uri}/${modalVideo?.imageUrl}`} alt={modalVideo?.id} />
@@ -36,5 +36,5 @@ export default function GalleryModal({
         </p>
       </div>
     </Modal>
-  );
+  ) : null;
 }

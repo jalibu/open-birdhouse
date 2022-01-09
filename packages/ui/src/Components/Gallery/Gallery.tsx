@@ -41,6 +41,14 @@ const Gallery = ({ t }: { t: any }) => {
           </>
         )}
       </Translation>
+      <GalleryModal
+        uri={galery.uri}
+        isOpened={isModalOpen}
+        modalVideo={modalVideo}
+        handleClose={(): void => {
+          setIsModalOpen(false);
+        }}
+      />
       <div className="gallery-grid bx--grid">
         <div className="bx--row">
           {galery.videos.map((video) => (
@@ -54,14 +62,6 @@ const Gallery = ({ t }: { t: any }) => {
           ))}
         </div>
       </div>
-      <GalleryModal
-        uri={galery.uri}
-        isOpened={isModalOpen}
-        modalVideo={modalVideo}
-        handleClose={(): void => {
-          setIsModalOpen(false);
-        }}
-      />
     </section>
   ) : null;
 };
