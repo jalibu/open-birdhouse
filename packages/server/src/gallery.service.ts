@@ -69,7 +69,7 @@ export class GalleryService {
     const fileVideoIds: string[] = [];
     const newVideoIds: string[] = [];
 
-    console.log('Updating galery. Current entries', this.db.length);
+    console.log('Updating gallery. Current entries', this.db.length);
 
     fileContents.forEach((content) => {
       if (content.endsWith('.jpg')) {
