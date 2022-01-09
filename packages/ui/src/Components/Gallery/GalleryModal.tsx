@@ -17,11 +17,7 @@ export default function GalleryModal({
     <Modal
       className="gallery-modal"
       iconDescription="Close"
-      modalHeading=""
-      modalLabel={(() => {
-        const date = new Date(`${modalVideo?.date}`);
-        return date.toLocaleString();
-      })()}
+      modalHeading="Recording"
       onRequestClose={handleClose}
       open={isOpened}
       passiveModal
@@ -30,8 +26,20 @@ export default function GalleryModal({
       <div className="bx--modal-content__text">
         <img src={`${uri}/${modalVideo?.imageUrl}`} alt={modalVideo?.id} />
         <p>
+          {(() => {
+            const date = new Date(`${modalVideo?.date}`);
+            return date.toLocaleString();
+          })()}
+        </p>
+        <p>
           <Link target="_blank" href={`${uri}/${modalVideo?.videoUrl}`}>
-            Download Video ({`${modalVideo?.filesize ? (modalVideo?.filesize / 1000000).toFixed(1) : 0} MB`})
+            Download Video (
+            {`${
+              modalVideo?.filesize
+                ? (modalVideo?.filesize / 1000000).toFixed(1)
+                : 0
+            } MB`}
+            )
           </Link>
         </p>
       </div>
