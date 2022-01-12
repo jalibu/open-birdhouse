@@ -5,7 +5,7 @@ import vision from '@google-cloud/vision';
 import { join } from 'path/posix';
 import * as fs from 'fs';
 import { DatabaseService } from './database.service';
-import { v2 as cloudinary } from 'cloudinary';
+import { v2 as cloudinary, UploadApiOptions } from 'cloudinary';
 
 @Injectable()
 export class GalleryService {
@@ -40,10 +40,10 @@ export class GalleryService {
     const imgPath = join(process.env.MEDIA_FOLDER, video.imageUrl);
     try {
       try {
-        const existingImage = await cloudinary.uploader.explicit(
-          `img-${video.id}`,
-        );
-        console.log('Image exists', existingImage);
+        await cloudinary.uploader.explicit(`img-${video.id}`, {
+          type: 'upload',
+        });
+        console.log(`Skipped img-${video.id} (exists)`);
       } catch (err) {
         const uploadImageResponse = await cloudinary.uploader.upload(imgPath, {
           resource_type: 'image',
@@ -51,15 +51,15 @@ export class GalleryService {
           public_id: `img-${video.id}`,
         });
         video.imageUrl = uploadImageResponse.url;
-        console.log(`Upload of image-${video.id} successful`);
+        console.log(`Upload of img-${video.id} successful`);
       }
 
       try {
-        const existingVideo = await cloudinary.uploader.explicit(
-          `video-${video.id}`,
-          { resource_type: 'video' },
-        );
-        console.log('Video exists', existingVideo);
+        await cloudinary.uploader.explicit(`video-${video.id}`, {
+          resource_type: 'video',
+          type: 'upload',
+        });
+        console.log(`Skipped video-${video.id} (exists)`);
       } catch (err) {
         const uploadVideoResponse = await cloudinary.uploader.upload(
           videoPath,
@@ -79,6 +79,7 @@ export class GalleryService {
     }
 
     // Performs label detection on the image file
+    /*
     const [result] = await this.annotatotClient.annotateImage({
       image: {
         source: {
@@ -96,6 +97,8 @@ export class GalleryService {
     for (const { name, score } of result.localizedObjectAnnotations) {
       video.annotations.push({ name, score });
     }
+
+    */
 
     return video;
   }
@@ -117,13 +120,18 @@ export class GalleryService {
             fileVideoIds.push(id);
             const exists = gallery.find((video) => video.id === id);
             if (!exists) {
-              console.log(id, 'does not exist');
+              console.log(
+                `${id}'s filesystem files do not yet exist in database`,
+              );
               newVideoIds.push(id);
             }
           }
         }
       } catch (err) {
-        console.warn('Err processing video', err.message);
+        console.warn(
+          'Error checking filesystem video in database',
+          err.message,
+        );
       }
     });
 
@@ -132,12 +140,15 @@ export class GalleryService {
       try {
         return fileVideoIds.includes(video.id);
       } catch (err) {
-        console.warn('Err filtering video entry', err.message);
+        console.warn('Error filtering video entry', err.message);
         return false;
       }
     });
 
-    console.log('Adding new videos to database', newVideoIds);
+    console.log(
+      'The following new videos will now be added to the database',
+      newVideoIds,
+    );
 
     const promises = newVideoIds.map((videoId) => this.createAndTag(videoId));
 
@@ -156,7 +167,10 @@ export class GalleryService {
 
     this.databaseService.setGallery(gallery);
 
-    console.log('Done updating galery. New number of entries', gallery.length);
+    console.log(
+      'Done updating the database. New number of entries',
+      gallery.length,
+    );
   }
 
   getGalery(): VideoApiResponse {
