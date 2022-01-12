@@ -17,11 +17,12 @@ export class DatabaseService {
 
   public getGallery = (): Video[] => {
     // Parse database date to real date
-    this.db.videos = this.db.videos.map((video) => {
-      video.date = new Date(video.date);
-      return video;
-    });
-    return this.db.videos || [];
+    this.db.videos =
+      this.db.videos?.map((video) => {
+        video.date = new Date(video.date);
+        return video;
+      }) || [];
+    return this.db.videos;
   };
 
   public setGallery = (newGallery: Video[]): Video[] => {
