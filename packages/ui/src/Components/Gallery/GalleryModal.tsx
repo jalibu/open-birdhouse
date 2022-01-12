@@ -24,7 +24,14 @@ export default function GalleryModal({
       size="sm"
     >
       <div className="bx--modal-content__text">
-        <img src={`${uri}/${modalVideo?.imageUrl}`} alt={modalVideo?.id} />
+        <img
+          src={
+            modalVideo.imageUrl.startsWith("http")
+              ? modalVideo.imageUrl
+              : `${uri}/${modalVideo.imageUrl}`
+          }
+          alt={modalVideo?.id}
+        />
         <p>
           {(() => {
             const date = new Date(`${modalVideo?.date}`);
@@ -32,7 +39,14 @@ export default function GalleryModal({
           })()}
         </p>
         <p>
-          <Link download href={`${uri}/${modalVideo?.videoUrl}`}>
+          <Link
+            target="_blank"
+            href={
+              modalVideo.videoUrl.startsWith("http")
+                ? modalVideo.videoUrl
+                : `${uri}/${modalVideo?.videoUrl}`
+            }
+          >
             Download Video (
             {`${
               modalVideo?.filesize
