@@ -39,18 +39,43 @@ export class GalleryService {
 
     const imgPath = join(process.env.MEDIA_FOLDER, video.imageUrl);
     try {
-      const uploadImageResponse = await cloudinary.uploader.upload(imgPath, {
-        public_id: `img-${video.id}`,
-      });
-      const uploadVideoResponse = await cloudinary.uploader.upload(videoPath, {
-        resource_type: 'video',
-        public_id: `video-${video.id}`,
-        chunk_size: 6000000,
-      });
-      video.imageUrl = uploadImageResponse.url;
-      video.videoUrl = uploadVideoResponse.url;
+      try {
+        const existingImage = await cloudinary.uploader.explicit(
+          `img-${video.id}`,
+        );
+        console.log('Image exists', existingImage);
+      } catch (err) {
+        const uploadImageResponse = await cloudinary.uploader.upload(imgPath, {
+          resource_type: 'image',
+          overwrite: false,
+          public_id: `img-${video.id}`,
+        });
+        video.imageUrl = uploadImageResponse.url;
+        console.log(`Upload of image-${video.id} successful`);
+      }
+
+      try {
+        const existingVideo = await cloudinary.uploader.explicit(
+          `video-${video.id}`,
+          { resource_type: 'video' },
+        );
+        console.log('Video exists', existingVideo);
+      } catch (err) {
+        const uploadVideoResponse = await cloudinary.uploader.upload(
+          videoPath,
+          {
+            resource_type: 'video',
+            overwrite: false,
+            public_id: `video-${video.id}`,
+            chunk_size: 6000000,
+          },
+        );
+
+        video.videoUrl = uploadVideoResponse.url;
+        console.log(`Upload of video-${video.id} successful`);
+      }
     } catch (err) {
-      console.log('err upload', err);
+      console.warn(`Error uploading ${video.id}`, err);
     }
 
     // Performs label detection on the image file
