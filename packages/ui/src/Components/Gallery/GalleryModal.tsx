@@ -1,5 +1,6 @@
 import { Video } from "@open-birdhouse/common";
 import { Link, Modal } from "carbon-components-react";
+import ReactPlayer from "react-player";
 import React from "react";
 
 export default function GalleryModal({
@@ -21,16 +22,17 @@ export default function GalleryModal({
       onRequestClose={handleClose}
       open={isOpened}
       passiveModal
-      size="sm"
+      size="lg"
     >
       <div className="bx--modal-content__text">
-        <img
-          src={
-            modalVideo.imageUrl.startsWith("http")
-              ? modalVideo.imageUrl
-              : `${uri}/${modalVideo.imageUrl}`
+        <ReactPlayer
+          url={
+            modalVideo.videoUrl.startsWith("http")
+              ? modalVideo.videoUrl
+              : `${uri}/${modalVideo?.videoUrl}`
           }
-          alt={modalVideo?.id}
+          controls
+          style={{ maxWidth: "100%", width: "100%" }}
         />
         <p>
           {(() => {

@@ -92,8 +92,8 @@ const GaleryEntry = ({
         }
         alt={video.imageUrl}
         onClick={() => {
-          setIsModalOpen(true);
           setModalVideo(video);
+          setIsModalOpen(true);
         }}
       />
       <div className="gallery-tags">
