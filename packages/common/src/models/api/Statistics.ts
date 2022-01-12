@@ -5,9 +5,12 @@ export type Statistics = {
     yesterday: Visitor[];
     yesterdayCalls: number;
   };
+  animals: {
+    todayCalls: number;
+  };
 };
 
-type Visitor = {
+export type Visitor = {
   id: string;
   date: number;
 };

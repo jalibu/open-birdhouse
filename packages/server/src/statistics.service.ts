@@ -1,60 +1,64 @@
 import { Injectable } from '@nestjs/common';
-
-import * as fs from 'fs';
 import { Statistics } from '@open-birdhouse/common';
-
-const DB_FILE = './statisticsDB.json';
+import { DatabaseService } from './database.service';
+import { GalleryService } from './gallery.service';
 
 @Injectable()
 export class StatisticsService {
-  statisticsInMemory: Statistics = JSON.parse(
-    fs.readFileSync(DB_FILE, 'utf-8'),
-  );
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly galleryService: GalleryService,
+  ) {}
 
   getStatistics(headers: any): Statistics {
-    const now = new Date();
-
-    if (!this.statisticsInMemory.visitors) {
-      this.statisticsInMemory.visitors = {
+    const statistics = this.databaseService.getStatistics() || {
+      visitors: {
         today: [],
         todayCalls: 0,
         yesterday: [],
         yesterdayCalls: 0,
+      },
+      animals: null,
+    };
+
+    try {
+      statistics.animals = {
+        todayCalls: this.galleryService
+          .getGalery()
+          .videos.filter((video) => video.date.getDay() === new Date().getDay())
+          .length,
       };
+    } catch (err) {
+      console.log('err', err);
     }
 
-    const existingVisitor = this.statisticsInMemory.visitors.today.find(
+    const now = new Date();
+
+    const existingVisitor = statistics.visitors.today.find(
       (visitor) => visitor.id === headers['user-agent'],
     );
 
     if (
-      this.statisticsInMemory.visitors.today.length > 0 &&
-      now.getDate() !== this.statisticsInMemory.visitors.today[0].date
+      statistics.visitors.today.length > 0 &&
+      now.getDate() !== statistics.visitors.today[0].date
     ) {
-      this.statisticsInMemory.visitors.yesterday =
-        this.statisticsInMemory.visitors.today;
-      this.statisticsInMemory.visitors.yesterdayCalls =
-        this.statisticsInMemory.visitors.todayCalls;
-      this.statisticsInMemory.visitors.today = [];
-      this.statisticsInMemory.visitors.todayCalls = 0;
+      statistics.visitors.yesterday = statistics.visitors.today;
+      statistics.visitors.yesterdayCalls = statistics.visitors.todayCalls;
+      statistics.visitors.today = [];
+      statistics.visitors.todayCalls = 0;
     }
 
-    this.statisticsInMemory.visitors.todayCalls++;
+    statistics.visitors.todayCalls++;
 
     if (!existingVisitor) {
-      this.statisticsInMemory.visitors.today.push({
+      statistics.visitors.today.push({
         id: headers['user-agent'],
         date: now.getDate(),
       });
     }
 
-    try {
-      fs.writeFile(DB_FILE, JSON.stringify(this.statisticsInMemory), () => {
-        // done
-      });
-    } catch (err) {
-      console.log(err);
-    }
-    return this.statisticsInMemory;
+    this.databaseService.setStatistics(statistics);
+
+    return statistics;
   }
 }

@@ -4,24 +4,21 @@ import { Video, VideoApiResponse } from '@open-birdhouse/common';
 import vision from '@google-cloud/vision';
 import { join } from 'path/posix';
 import * as fs from 'fs';
+import { DatabaseService } from './database.service';
+import { v2 as cloudinary } from 'cloudinary';
 
 @Injectable()
 export class GalleryService {
-  private db: Video[] = [];
-
   private annotatotClient = new vision.ImageAnnotatorClient({
     keyFile: process.env.GOOGLE_KEYFILE,
   });
 
-  constructor() {
-    const path = join(process.env.MEDIA_FOLDER, 'db.json');
-    try {
-      this.db = JSON.parse(fs.readFileSync(path, 'utf-8'));
-    } catch (err) {
-      console.warn('Could not read db. Creating a new one');
-      fs.writeFileSync(path, JSON.stringify(this.db));
-    }
-
+  constructor(private readonly databaseService: DatabaseService) {
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET,
+    });
     this.updateGalery();
   }
 
@@ -41,6 +38,20 @@ export class GalleryService {
     video.filesize = filestats.size;
 
     const imgPath = join(process.env.MEDIA_FOLDER, video.imageUrl);
+    try {
+      const uploadImageResponse = await cloudinary.uploader.upload(imgPath, {
+        public_id: `img-${video.id}`,
+      });
+      const uploadVideoResponse = await cloudinary.uploader.upload(videoPath, {
+        resource_type: 'video',
+        public_id: `video-${video.id}`,
+        chunk_size: 6000000,
+      });
+      video.imageUrl = uploadImageResponse.url;
+      video.videoUrl = uploadVideoResponse.url;
+    } catch (err) {
+      console.log('err upload', err);
+    }
 
     // Performs label detection on the image file
     const [result] = await this.annotatotClient.annotateImage({
@@ -69,50 +80,64 @@ export class GalleryService {
     const fileVideoIds: string[] = [];
     const newVideoIds: string[] = [];
 
-    console.log('Updating gallery. Current entries', this.db.length);
+    let gallery = this.databaseService.getGallery();
+
+    console.log('Updating gallery. Current entries', gallery.length);
 
     fileContents.forEach((content) => {
-      if (content.endsWith('.jpg')) {
-        const id = content.substr(0, content.length - 4);
-        if (fileContents.includes(`${id}.mp4`)) {
-          fileVideoIds.push(id);
-          const exists = this.db.find((video) => video.id === id);
-          if (!exists) {
-            console.log(id, 'does not exist');
-            newVideoIds.push(id);
+      try {
+        if (content.endsWith('.jpg')) {
+          const id = content.substr(0, content.length - 4);
+          if (fileContents.includes(`${id}.mp4`)) {
+            fileVideoIds.push(id);
+            const exists = gallery.find((video) => video.id === id);
+            if (!exists) {
+              console.log(id, 'does not exist');
+              newVideoIds.push(id);
+            }
           }
         }
+      } catch (err) {
+        console.warn('Err processing video', err.message);
       }
     });
 
     // Cleanup database. Remove non-existent videos
-    this.db = this.db.filter((video) => fileVideoIds.includes(video.id));
+    gallery = gallery.filter((video) => {
+      try {
+        return fileVideoIds.includes(video.id);
+      } catch (err) {
+        console.warn('Err filtering video entry', err.message);
+        return false;
+      }
+    });
 
     console.log('Adding new videos to database', newVideoIds);
 
-    // Add new videos to db
-    for (const videoId of newVideoIds) {
-      this.db.push(await this.createAndTag(videoId));
+    const promises = newVideoIds.map((videoId) => this.createAndTag(videoId));
+
+    const newVideos = await Promise.all(promises.map((p) => p.catch((e) => e)));
+    for (const response of newVideos) {
+      if (response instanceof Error) {
+        console.warn(`Creation request for video failed:`, response.message);
+      } else {
+        gallery.push(response);
+      }
     }
 
-    const path = join(process.env.MEDIA_FOLDER, 'db.json');
-    try {
-      fs.writeFileSync(path, JSON.stringify(this.db));
-    } catch (err) {
-      console.warn('Could not write db', err);
-    }
-
-    this.db.sort((a, b) => {
+    gallery.sort((a, b) => {
       return new Date(a.date) > new Date(b.date) ? -1 : 1;
     });
 
-    console.log('Done updating galery. New number of entries', this.db.length);
+    this.databaseService.setGallery(gallery);
+
+    console.log('Done updating galery. New number of entries', gallery.length);
   }
 
-  async getGalery(): Promise<VideoApiResponse> {
+  getGalery(): VideoApiResponse {
     return {
       uri: process.env.MEDIA_URI,
-      videos: this.db,
+      videos: this.databaseService.getGallery(),
     };
   }
 }

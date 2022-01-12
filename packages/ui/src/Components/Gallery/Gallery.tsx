@@ -85,7 +85,11 @@ const GaleryEntry = ({
       <img
         key={`img-${video.id}-${video.filesize}`}
         className="gallery-image"
-        src={`${uri}/${video.imageUrl}`}
+        src={
+          video.imageUrl.startsWith("http")
+            ? video.imageUrl
+            : `${uri}/${video.imageUrl}`
+        }
         alt={video.imageUrl}
         onClick={() => {
           setIsModalOpen(true);

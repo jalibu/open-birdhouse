@@ -3,6 +3,7 @@ import { AppController } from './cams.controller';
 import { CamsService } from './cams.service';
 import { ControlsController } from './controls.controller';
 import { ControlsService } from './controls.service';
+import { DatabaseService } from './database.service';
 import { GalleryController } from './gallery.controller';
 import { GalleryService } from './gallery.service';
 import { StatisticsController } from './statistics.controller';
@@ -22,6 +23,7 @@ import { WeatherService } from './weather.service';
   providers: [
     CamsService,
     ControlsService,
+    DatabaseService,
     GalleryService,
     StatisticsService,
     WeatherService,
