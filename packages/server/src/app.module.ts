@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Logger } from '@nestjs/common';
 import { AppController } from './cams.controller';
 import { CamsService } from './cams.service';
 import { ControlsController } from './controls.controller';
@@ -27,6 +27,7 @@ import { WeatherService } from './weather.service';
     GalleryService,
     StatisticsService,
     WeatherService,
+    Logger,
   ],
 })
 export class AppModule {}

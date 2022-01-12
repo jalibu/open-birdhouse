@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Statistics } from '@open-birdhouse/common';
 import { DatabaseService } from './database.service';
 import { GalleryService } from './gallery.service';
@@ -8,6 +8,7 @@ export class StatisticsService {
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly galleryService: GalleryService,
+    private readonly logger: Logger,
   ) {}
 
   getStatistics(headers: any): Statistics {
@@ -29,7 +30,10 @@ export class StatisticsService {
           .length,
       };
     } catch (err) {
-      console.log('err', err);
+      this.logger.log(
+        `Error getting statistics: ${err.message}`,
+        StatisticsService.name,
+      );
     }
 
     const now = new Date();

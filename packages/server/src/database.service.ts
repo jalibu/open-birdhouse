@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Database, Statistics, Video } from '@open-birdhouse/common';
 import * as fs from 'fs';
 
@@ -6,11 +6,18 @@ import * as fs from 'fs';
 export class DatabaseService {
   private db: Database = {};
 
-  constructor() {
+  constructor(private readonly logger: Logger) {
     try {
       this.db = JSON.parse(fs.readFileSync(process.env.DATABASE_FILE, 'utf-8'));
+      logger.log(
+        'Successfully parsed existing file database',
+        DatabaseService.name,
+      );
     } catch (err) {
-      console.warn('Could not read database file. Creating a new one');
+      logger.warn(
+        'Could not read database file. Creating a new one',
+        DatabaseService.name,
+      );
       fs.writeFileSync(process.env.DATABASE_FILE, JSON.stringify(this.db));
     }
   }
@@ -50,7 +57,10 @@ export class DatabaseService {
       fs.writeFileSync(process.env.DATABASE_FILE, JSON.stringify(newData));
       this.db = newData;
     } catch (err) {
-      console.warn('Could not update statistics in database', err);
+      this.logger.warn(
+        `Could not update database: ${err.message}`,
+        DatabaseService.name,
+      );
     }
   };
 }
