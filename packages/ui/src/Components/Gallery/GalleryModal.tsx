@@ -22,7 +22,7 @@ export default function GalleryModal({
       onRequestClose={handleClose}
       open={isOpened}
       passiveModal
-      size="lg"
+      size="sm"
     >
       <ReactPlayer
         url={
@@ -31,7 +31,7 @@ export default function GalleryModal({
             : `${uri}/${modalVideo?.videoUrl}`
         }
         controls
-        style={{ maxWidth: "100%", width: "100%" }}
+        style={{ maxWidth: "100%", width: "100%", minHeight: "320px" }}
       />
       <p>
         {(() => {

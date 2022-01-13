@@ -14,12 +14,13 @@ const resources = {
         CAMERAS: "Cameras",
       },
       CAMERAS: {
+        IMG_ALT: "Live feed was interrupted. Please try to reload the page.",
         TITLE: "Cameras",
-        LIVE_FEED: "live feed"
+        LIVE_FEED: "live feed",
       },
       GALLERY: {
         TITLE: "Gallery",
-        TAGS: "These tags were automatically created by AI with object recognition"
+        TAGS: "These tags were automatically created by AI with object recognition",
       },
       STATS: {
         TITLE: "Statistics",
@@ -28,8 +29,8 @@ const resources = {
         BIRDS_TODAY: "Birds today",
         BIRDS_YESTERDAY: "Birds yesterday",
       },
-      WEATHER:{
-        TITLE: "Weather"
+      WEATHER: {
+        TITLE: "Weather",
       },
       CONTROLS: {
         TITLE: "Controls",
@@ -58,12 +59,14 @@ const resources = {
         CAMERAS: "Kameras",
       },
       CAMERAS: {
+        IMG_ALT:
+          "Live Übertragung wurde unterbrochen. Bitte lade die Seite neu.",
         TITLE: "Kameras",
-        LIVE_FEED: "live Übertragung"
+        LIVE_FEED: "live Übertragung",
       },
       GALLERY: {
         TITLE: "Galerie",
-        TAGS: "Diese Tags wurden automatisch durch KI unterstütze Bilderkennung ermittelt"
+        TAGS: "Diese Tags wurden automatisch durch KI unterstütze Bilderkennung ermittelt",
       },
       STATS: {
         TITLE: "Statistik",

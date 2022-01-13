@@ -111,26 +111,25 @@ export class GalleryService {
     }
 
     // Performs label detection on the image file
-    /*
-    const [result] = await this.annotatotClient.annotateImage({
-      image: {
-        source: {
-          filename: imgPath,
+    if (process.env.ANNOTATE_IMAGES === 'true') {
+      const [result] = await this.annotatotClient.annotateImage({
+        image: {
+          source: {
+            filename: imgPath,
+          },
         },
-      },
-      features: [
-        {
-          maxResults: 5,
-          type: 'OBJECT_LOCALIZATION',
-        },
-      ],
-    });
+        features: [
+          {
+            maxResults: 5,
+            type: 'OBJECT_LOCALIZATION',
+          },
+        ],
+      });
 
-    for (const { name, score } of result.localizedObjectAnnotations) {
-      video.annotations.push({ name, score });
+      for (const { name, score } of result.localizedObjectAnnotations) {
+        video.annotations.push({ name, score });
+      }
     }
-
-    */
 
     return video;
   }
@@ -145,29 +144,6 @@ export class GalleryService {
         return;
       }
       this.isWorking = true;
-
-      /*
-      try {
-        const scriptPath = join(
-          __dirname,
-          '../../../scripts/videoTransformer.sh',
-        );
-        this.logger.log(
-          `Starting video transformer script`,
-          GalleryService.name,
-        );
-        const transformerResponse = execSync(
-          `${scriptPath} ${process.env.MEDIA_FOLDER}  ${process.env.USE_SUDO}`,
-          { timeout: 5 * 60 * 1000 },
-        );
-        this.logger.log(transformerResponse.toString(), 'videoTransformer.sh');
-      } catch (err) {
-        this.logger.warn(
-          `Error calling video transformer: ${err.message}`,
-          GalleryService.name,
-        );
-      }
-      */
 
       const fileContents = fs.readdirSync(process.env.MEDIA_FOLDER);
       const fileVideoIds: string[] = [];
@@ -258,21 +234,6 @@ export class GalleryService {
         }
       }
 
-      /*
-    const promises = newVideoIds.map((videoId) => this.createAndTag(videoId));
-
-    const newVideos = await Promise.all(promises.map((p) => p.catch((e) => e)));
-    for (const response of newVideos) {
-      if (response instanceof Error) {
-        this.logger.warn(
-          `Creation request for video failed: ${response.message}`,
-          GalleryService.name,
-        );
-      } else {
-        gallery.push(response);
-      }
-    }
-    */
       gallery.sort((a, b) => {
         return new Date(a.date) > new Date(b.date) ? -1 : 1;
       });

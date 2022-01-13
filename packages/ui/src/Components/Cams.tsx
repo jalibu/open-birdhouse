@@ -58,7 +58,7 @@ const Cams = ({ t }: { t: any }) => {
                 maxHeight: "600px",
                 maxWidth: "100%",
               }}
-              alt={cam.name}
+              alt={t("CAMERAS.IMG_ALT")}
             />
             {waitForCam && (
               <>
