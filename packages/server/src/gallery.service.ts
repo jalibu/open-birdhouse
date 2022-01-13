@@ -157,7 +157,7 @@ export class GalleryService {
           GalleryService.name,
         );
         const transformerResponse = execSync(
-          `${scriptPath} ${process.env.MEDIA_FOLDER}`,
+          `${scriptPath} ${process.env.MEDIA_FOLDER}  ${process.env.USE_SUDO}`,
           { timeout: 5 * 60 * 1000 },
         );
         this.logger.log(transformerResponse.toString(), 'videoTransformer.sh');
