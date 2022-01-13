@@ -57,7 +57,7 @@ export class GalleryService {
           `Skipped ${video.imageUrl} (exists)`,
           GalleryService.name,
         );
-        video.imageUrl = existingImage.url;
+        video.imageUrl = existingImage.secure_url;
       } catch (err) {
         const uploadImageResponse = await cloudinary.uploader.upload(imgPath, {
           resource_type: 'image',
@@ -69,7 +69,7 @@ export class GalleryService {
           `Upload of ${video.imageUrl} successful`,
           GalleryService.name,
         );
-        video.imageUrl = uploadImageResponse.url;
+        video.imageUrl = uploadImageResponse.secure_url;
       }
 
       try {
@@ -84,7 +84,8 @@ export class GalleryService {
           `Skipped ${video.videoUrl} (exists)`,
           GalleryService.name,
         );
-        video.videoUrl = existingVideo.url;
+        video.filesize = existingVideo.bytes;
+        video.videoUrl = existingVideo.secure_url;
       } catch (err) {
         const uploadVideoResponse = await cloudinary.uploader.upload(
           videoPath,
@@ -100,7 +101,8 @@ export class GalleryService {
           `Upload of ${video.videoUrl} successful`,
           GalleryService.name,
         );
-        video.videoUrl = uploadVideoResponse.url;
+        video.filesize = uploadVideoResponse.bytes;
+        video.videoUrl = uploadVideoResponse.secure_url;
       }
     } catch (err) {
       this.logger.warn(
