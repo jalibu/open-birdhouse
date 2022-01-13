@@ -6,11 +6,15 @@ import * as fs from 'fs';
 import { DatabaseService } from './database.service';
 import { v2 as cloudinary } from 'cloudinary';
 
+const VIDEO_FILES_TYPE = 'webm';
+
 @Injectable()
 export class GalleryService {
   private annotatotClient = new vision.ImageAnnotatorClient({
     keyFile: process.env.GOOGLE_KEYFILE,
   });
+
+  private isWorking = false;
 
   constructor(
     private readonly databaseService: DatabaseService,
@@ -28,7 +32,7 @@ export class GalleryService {
     const video: Video = {
       id: id,
       imageUrl: `${id}.jpg`,
-      videoUrl: `${id}.mp4`,
+      videoUrl: `${id}.${VIDEO_FILES_TYPE}`,
       annotations: [],
     };
 
@@ -43,32 +47,42 @@ export class GalleryService {
     try {
       try {
         const existingImage = await cloudinary.uploader.explicit(
-          `img-${video.id}`,
+          `${video.id}`,
           {
             type: 'upload',
           },
         );
-        this.logger.log(`Skipped img-${video.id} (exists)`);
+        this.logger.warn(
+          `Skipped ${video.imageUrl} (exists)`,
+          GalleryService.name,
+        );
         video.imageUrl = existingImage.url;
       } catch (err) {
         const uploadImageResponse = await cloudinary.uploader.upload(imgPath, {
           resource_type: 'image',
           overwrite: false,
-          public_id: `img-${video.id}`,
+          public_id: `${video.id}`,
         });
+
+        this.logger.log(
+          `Upload of ${video.imageUrl} successful`,
+          GalleryService.name,
+        );
         video.imageUrl = uploadImageResponse.url;
-        this.logger.log(`Upload of img-${video.id} successful`);
       }
 
       try {
         const existingVideo = await cloudinary.uploader.explicit(
-          `video-${video.id}`,
+          `${video.id}`,
           {
             resource_type: 'video',
             type: 'upload',
           },
         );
-        this.logger.log(`Skipped video-${video.id} (exists)`);
+        this.logger.log(
+          `Skipped ${video.videoUrl} (exists)`,
+          GalleryService.name,
+        );
         video.videoUrl = existingVideo.url;
       } catch (err) {
         const uploadVideoResponse = await cloudinary.uploader.upload(
@@ -76,16 +90,22 @@ export class GalleryService {
           {
             resource_type: 'video',
             overwrite: false,
-            public_id: `video-${video.id}`,
+            public_id: `${video.id}`,
             chunk_size: 6000000,
           },
         );
 
+        this.logger.log(
+          `Upload of ${video.videoUrl} successful`,
+          GalleryService.name,
+        );
         video.videoUrl = uploadVideoResponse.url;
-        this.logger.log(`Upload of video-${video.id} successful`);
       }
     } catch (err) {
-      this.logger.warn(`Error uploading ${video.id}`, err);
+      this.logger.warn(
+        `Error uploading ${video.videoUrl}: ${err.message}`,
+        GalleryService.name,
+      );
     }
 
     // Performs label detection on the image file
@@ -114,59 +134,105 @@ export class GalleryService {
   }
 
   async updateGalery(): Promise<void> {
-    const fileContents = fs.readdirSync(process.env.MEDIA_FOLDER);
-    const fileVideoIds: string[] = [];
-    const newVideoIds: string[] = [];
+    if (this.isWorking) {
+      this.logger.log(
+        `Gallery updater is already working`,
+        GalleryService.name,
+      );
+      return;
+    }
+    this.isWorking = true;
+    try {
+      const fileContents = fs.readdirSync(process.env.MEDIA_FOLDER);
+      const fileVideoIds: string[] = [];
+      const newVideoIds: string[] = [];
 
-    let gallery = this.databaseService.getGallery();
+      let gallery = this.databaseService.getGallery();
 
-    this.logger.log(
-      `Updating gallery. Current entries: ${gallery.length}`,
-      GalleryService.name,
-    );
+      this.logger.log(
+        `Updating gallery. Current entries: ${gallery.length}`,
+        GalleryService.name,
+      );
 
-    fileContents.forEach((content) => {
-      try {
-        if (content.endsWith('.jpg')) {
-          const id = content.substr(0, content.length - 4);
-          if (fileContents.includes(`${id}.mp4`)) {
-            fileVideoIds.push(id);
-            const exists = gallery.find((video) => video.id === id);
-            if (!exists) {
-              this.logger.log(
-                `${id}'s filesystem files do not yet exist in database`,
+      fileContents.forEach((content) => {
+        try {
+          if (content.endsWith('.jpg')) {
+            const id = content.substr(0, content.length - 4);
+            if (fileContents.includes(`${id}.${VIDEO_FILES_TYPE}`)) {
+              fileVideoIds.push(id);
+              const exists = gallery.find((video) => video.id === id);
+              if (!exists) {
+                this.logger.debug(
+                  `Video files pair '${id}' exists on filesystem, but they are not (yet) in the database`,
+                  GalleryService.name,
+                );
+                newVideoIds.push(id);
+              }
+            } else {
+              this.logger.warn(
+                `Image '${content}' does not have corresponding video file on filesystem`,
                 GalleryService.name,
               );
-              newVideoIds.push(id);
+            }
+          } else if (content.endsWith(VIDEO_FILES_TYPE)) {
+            const id = content.substr(
+              0,
+              content.length - (VIDEO_FILES_TYPE.length + 1),
+            );
+            if (!fileContents.includes(`${id}.jpg`)) {
+              this.logger.warn(
+                `Video '${content}' does not have corresponding image file on filesystem`,
+                GalleryService.name,
+              );
             }
           }
+        } catch (err) {
+          this.logger.warn(
+            `Error checking filesystem video in database: ${err.message}`,
+            GalleryService.name,
+          );
         }
-      } catch (err) {
-        this.logger.warn(
-          `Error checking filesystem video in database: ${err.message}`,
-          GalleryService.name,
-        );
+      });
+
+      // Cleanup database. Remove non-existent videos
+      gallery = gallery.filter((video) => {
+        try {
+          const doFilesExist = fileVideoIds.includes(video.id);
+          if (!doFilesExist) {
+            this.logger.warn(
+              `Database video '${video.id}' does not exist on filesystem. Removing entry from database...`,
+              GalleryService.name,
+            );
+          }
+
+          return doFilesExist;
+        } catch (err) {
+          this.logger.warn(
+            `Error filtering video entry: ${err.message}`,
+            GalleryService.name,
+          );
+          return false;
+        }
+      });
+
+      this.logger.log(
+        `The following new videos will now be added to the database: ${newVideoIds}`,
+        GalleryService.name,
+      );
+
+      for (const newVideoId of newVideoIds) {
+        try {
+          const newVideo = await this.createAndTag(newVideoId);
+          gallery.push(newVideo);
+        } catch (err) {
+          this.logger.warn(
+            `Creation request for video failed: ${err.message}`,
+            GalleryService.name,
+          );
+        }
       }
-    });
 
-    // Cleanup database. Remove non-existent videos
-    gallery = gallery.filter((video) => {
-      try {
-        return fileVideoIds.includes(video.id);
-      } catch (err) {
-        this.logger.warn(
-          `Error filtering video entry: ${err.message}`,
-          GalleryService.name,
-        );
-        return false;
-      }
-    });
-
-    this.logger.log(
-      `The following new videos will now be added to the database: ${newVideoIds}`,
-      GalleryService.name,
-    );
-
+      /*
     const promises = newVideoIds.map((videoId) => this.createAndTag(videoId));
 
     const newVideos = await Promise.all(promises.map((p) => p.catch((e) => e)));
@@ -180,17 +246,25 @@ export class GalleryService {
         gallery.push(response);
       }
     }
+    */
+      gallery.sort((a, b) => {
+        return new Date(a.date) > new Date(b.date) ? -1 : 1;
+      });
 
-    gallery.sort((a, b) => {
-      return new Date(a.date) > new Date(b.date) ? -1 : 1;
-    });
+      this.databaseService.setGallery(gallery);
 
-    this.databaseService.setGallery(gallery);
-
-    this.logger.log(
-      `Done updating the database. New number of entries: ${gallery.length}`,
-      GalleryService.name,
-    );
+      this.logger.log(
+        `Done updating the database. New number of entries: ${gallery.length}`,
+        GalleryService.name,
+      );
+    } catch (err) {
+      this.logger.warn(
+        `There was a problem refreshing the gallery: ${err.message}`,
+        GalleryService.name,
+      );
+    } finally {
+      this.isWorking = false;
+    }
   }
 
   getGalery(): VideoApiResponse {
