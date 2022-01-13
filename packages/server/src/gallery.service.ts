@@ -5,6 +5,7 @@ import { join } from 'path/posix';
 import * as fs from 'fs';
 import { DatabaseService } from './database.service';
 import { v2 as cloudinary } from 'cloudinary';
+import { execSync } from 'child_process';
 
 const VIDEO_FILES_TYPE = 'webm';
 
@@ -134,15 +135,37 @@ export class GalleryService {
   }
 
   async updateGalery(): Promise<void> {
-    if (this.isWorking) {
-      this.logger.log(
-        `Gallery updater is already working`,
-        GalleryService.name,
-      );
-      return;
-    }
-    this.isWorking = true;
     try {
+      if (this.isWorking) {
+        this.logger.log(
+          `Gallery updater is already working`,
+          GalleryService.name,
+        );
+        return;
+      }
+      this.isWorking = true;
+
+      try {
+        const scriptPath = join(
+          __dirname,
+          '../../../scripts/videoTransformer.sh',
+        );
+        this.logger.log(
+          `Starting video transformer script`,
+          GalleryService.name,
+        );
+        const transformerResponse = execSync(
+          `${scriptPath} ${process.env.MEDIA_FOLDER}`,
+          { timeout: 5 * 60 * 1000 },
+        );
+        this.logger.log(transformerResponse.toString(), 'videoTransformer.sh');
+      } catch (err) {
+        this.logger.warn(
+          `Error calling video transformer: ${err.message}`,
+          GalleryService.name,
+        );
+      }
+
       const fileContents = fs.readdirSync(process.env.MEDIA_FOLDER);
       const fileVideoIds: string[] = [];
       const newVideoIds: string[] = [];
