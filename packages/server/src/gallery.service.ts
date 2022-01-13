@@ -5,9 +5,8 @@ import { join } from 'path/posix';
 import * as fs from 'fs';
 import { DatabaseService } from './database.service';
 import { v2 as cloudinary } from 'cloudinary';
-import { execSync } from 'child_process';
 
-const VIDEO_FILES_TYPE = 'webm';
+const VIDEO_FILES_TYPE = 'mp4';
 
 @Injectable()
 export class GalleryService {
@@ -147,6 +146,7 @@ export class GalleryService {
       }
       this.isWorking = true;
 
+      /*
       try {
         const scriptPath = join(
           __dirname,
@@ -167,6 +167,7 @@ export class GalleryService {
           GalleryService.name,
         );
       }
+      */
 
       const fileContents = fs.readdirSync(process.env.MEDIA_FOLDER);
       const fileVideoIds: string[] = [];
