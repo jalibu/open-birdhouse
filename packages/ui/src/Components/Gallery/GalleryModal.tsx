@@ -25,6 +25,12 @@ export default function GalleryModal({
       size="sm"
     >
       <ReactPlayer
+        playing
+        light={
+          modalVideo.imageUrl.startsWith("http")
+            ? modalVideo.imageUrl
+            : `${uri}/${modalVideo?.imageUrl}`
+        }
         url={
           modalVideo.videoUrl.startsWith("http")
             ? modalVideo.videoUrl
@@ -36,7 +42,13 @@ export default function GalleryModal({
       <p>
         {(() => {
           const date = new Date(`${modalVideo?.date}`);
-          return date.toLocaleString();
+          return date.toLocaleString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            day: "2-digit",
+            month: "2-digit",
+            year: "2-digit",
+          });
         })()}
       </p>
       <p>

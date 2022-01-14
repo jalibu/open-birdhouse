@@ -52,7 +52,7 @@ export class GalleryService {
             type: 'upload',
           },
         );
-        this.logger.warn(
+        this.logger.debug(
           `Skipped ${video.imageUrl} (exists)`,
           GalleryService.name,
         );
@@ -79,7 +79,7 @@ export class GalleryService {
             type: 'upload',
           },
         );
-        this.logger.log(
+        this.logger.debug(
           `Skipped ${video.videoUrl} (exists)`,
           GalleryService.name,
         );

@@ -5,7 +5,7 @@ import React, {
   Dispatch,
   SetStateAction,
 } from "react";
-import { Tag } from "carbon-components-react";
+import { Column, Grid, Pagination, Row, Tag } from "carbon-components-react";
 import "./Gallery.scss";
 import { withTranslation } from "react-i18next";
 import ApiRequestService from "../../Services/ApiRequestService";
@@ -19,7 +19,7 @@ const Gallery = ({ t }: { t: any }) => {
   const [modalVideo, setModalVideo] = useState<Video>();
   const statusContext = useContext(StatusContext);
   const apiService = new ApiRequestService(statusContext);
-  const [galery, setGalery] = useState<VideoApiResponse>();
+  const [gallery, setGalery] = useState<VideoApiResponse>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,10 +32,10 @@ const Gallery = ({ t }: { t: any }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [t]);
 
-  return galery && galery?.videos?.length > 0 ? (
+  return gallery && gallery?.videos?.length > 0 ? (
     <section>
       <GalleryModal
-        uri={galery.uri}
+        uri={gallery.uri}
         isOpened={isModalOpen}
         modalVideo={modalVideo}
         handleClose={(): void => {
@@ -49,19 +49,32 @@ const Gallery = ({ t }: { t: any }) => {
           </>
         )}
       </Translation>
-      <div className="gallery-grid bx--grid">
-        <div className="bx--row">
-          {galery.videos.map((video) => (
+      <Grid className="gallery-grid">
+        <Row>
+          {gallery.videos.map((video) => (
             <GaleryEntry
               key={`gallery-entry-${video.id}-${video.filesize}`}
-              uri={galery.uri}
+              uri={gallery.uri}
               video={video}
               setIsModalOpen={setIsModalOpen}
               setModalVideo={setModalVideo}
             />
           ))}
-        </div>
-      </div>
+        </Row>
+      </Grid>
+      <Pagination
+        backwardText="Previous page"
+        forwardText="Next page"
+        itemsPerPageText="Items per page:"
+        page={1}
+        onChange={({ page, pageSize }) => {
+          console.log("pages", (page - 1) * pageSize, page * pageSize - 1);
+        }}
+        pageNumberText="Page Number"
+        pageSize={10}
+        pageSizes={[16, 32, 64]}
+        totalItems={gallery.videos.length}
+      />
     </section>
   ) : null;
 };
@@ -78,9 +91,12 @@ const GaleryEntry = ({
   setModalVideo: Dispatch<SetStateAction<Video | undefined>>;
 }) => {
   return (
-    <div
+    <Column
+      className="gallery-entry"
+      sm={2}
+      md={4}
+      lg={4}
       key={`wrap-${video.id}-${video.filesize}`}
-      className="gallery-col bx--col-lg-4 bx--col-md-2 bx--col-sm-2"
     >
       <img
         key={`img-${video.id}-${video.filesize}`}
@@ -100,7 +116,7 @@ const GaleryEntry = ({
         <span className="gallery-date">
           {(() => {
             const date = new Date(`${video.date}`);
-            return date.toLocaleString();
+            return date.toLocaleString([], {hour: '2-digit', minute:'2-digit', day: '2-digit', month: '2-digit', year: '2-digit'});
           })()}
         </span>
         {process.env.REACT_APP_SHOW_ANNOTATIONS === "true" &&
@@ -113,7 +129,7 @@ const GaleryEntry = ({
             </Tag>
           ))}
       </div>
-    </div>
+    </Column>
   );
 };
 

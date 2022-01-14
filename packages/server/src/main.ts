@@ -9,29 +9,28 @@ import * as dotenv from 'dotenv-flow';
 dotenv.config();
 
 async function bootstrap() {
-  const loggerOptions = {
-    format: winston.format.combine(
-      winston.format.timestamp(),
-      nestWinstonModuleUtilities.format.nestLike('Server', {
-        prettyPrint: true,
-      }),
-    ),
-  };
+  const loggerOptions = [winston.format.timestamp()];
+
   const app = await NestFactory.create(AppModule, {
     logger: WinstonModule.createLogger({
+      level: 'info',
       transports: [
-        new winston.transports.Console(loggerOptions),
-        new winston.transports.File({
-          ...loggerOptions,
-          filename: 'error.log',
-          level: 'error',
+        new winston.transports.Console({
+          format: winston.format.combine(
+            ...loggerOptions,
+            nestWinstonModuleUtilities.format.nestLike('Server', {
+              prettyPrint: true,
+            }),
+          ),
         }),
         new winston.transports.File({
-          ...loggerOptions,
+          format: winston.format.combine(
+            ...loggerOptions,
+            winston.format.simple(),
+          ),
           filename: 'combined.log',
         }),
       ],
-      // other options
     }),
   });
   app.enableCors({
