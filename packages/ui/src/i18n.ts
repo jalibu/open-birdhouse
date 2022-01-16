@@ -21,6 +21,12 @@ const resources = {
       GALLERY: {
         TITLE: "Gallery",
         TAGS: "These tags were automatically created by AI with object recognition",
+        PAGINATION: {
+          BACKWARD: "Previous page",
+          FORWARD: "Next page",
+          ITEMS: "Items per page:",
+          PAGE_NUMBER: "Page Number"
+        }
       },
       STATS: {
         TITLE: "Statistics",
@@ -67,6 +73,12 @@ const resources = {
       GALLERY: {
         TITLE: "Galerie",
         TAGS: "Diese Tags wurden automatisch durch KI unterstütze Bilderkennung ermittelt",
+        PAGINATION: {
+          BACKWARD: "Vorherige Seite",
+          FORWARD: "Nächste Seite",
+          ITEMS: "Videos pro Seite",
+          PAGE_NUMBER: "Seite"
+        }
       },
       STATS: {
         TITLE: "Statistik",

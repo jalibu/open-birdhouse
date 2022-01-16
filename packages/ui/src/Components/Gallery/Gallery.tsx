@@ -4,6 +4,7 @@ import React, {
   useContext,
   Dispatch,
   SetStateAction,
+  useRef,
 } from "react";
 import { Column, Grid, Pagination, Row, Tag } from "carbon-components-react";
 import "./Gallery.scss";
@@ -13,6 +14,7 @@ import StatusContext from "../../Context/StatusContext/StatusContext";
 import { Video, VideoApiResponse } from "@open-birdhouse/common";
 import { Translation } from "react-i18next";
 import GalleryModal from "./GalleryModal";
+import { Minimize16 } from "@carbon/icons-react";
 
 const Gallery = ({ t }: { t: any }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -20,6 +22,9 @@ const Gallery = ({ t }: { t: any }) => {
   const statusContext = useContext(StatusContext);
   const apiService = new ApiRequestService(statusContext);
   const [gallery, setGalery] = useState<VideoApiResponse>();
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(12);
+  const gallerySectionRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,15 +38,7 @@ const Gallery = ({ t }: { t: any }) => {
   }, [t]);
 
   return gallery && gallery?.videos?.length > 0 ? (
-    <section>
-      <GalleryModal
-        uri={gallery.uri}
-        isOpened={isModalOpen}
-        modalVideo={modalVideo}
-        handleClose={(): void => {
-          setIsModalOpen(false);
-        }}
-      />
+    <section ref={gallerySectionRef}>
       <Translation>
         {(t) => (
           <>
@@ -51,29 +48,43 @@ const Gallery = ({ t }: { t: any }) => {
       </Translation>
       <Grid className="gallery-grid">
         <Row>
-          {gallery.videos.map((video) => (
-            <GaleryEntry
-              key={`gallery-entry-${video.id}-${video.filesize}`}
-              uri={gallery.uri}
-              video={video}
-              setIsModalOpen={setIsModalOpen}
-              setModalVideo={setModalVideo}
-            />
-          ))}
+          {gallery.videos
+            .slice((page - 1) * pageSize, page * pageSize)
+            .map((video) => (
+              <GaleryEntry
+                key={`gallery-entry-${video.id}-${video.filesize}`}
+                uri={gallery.uri}
+                video={video}
+                setIsModalOpen={setIsModalOpen}
+                setModalVideo={setModalVideo}
+              />
+            ))}
         </Row>
       </Grid>
       <Pagination
-        backwardText="Previous page"
-        forwardText="Next page"
-        itemsPerPageText="Items per page:"
+        backwardText={t("GALLERY.PAGINATION.BACKWARD")}
+        forwardText={t("GALLERY.PAGINATION.FORWARD")}
+        itemsPerPageText={t("GALLERY.PAGINATION.ITEMS")}
         page={1}
         onChange={({ page, pageSize }) => {
-          console.log("pages", (page - 1) * pageSize, page * pageSize - 1);
+          gallerySectionRef.current?.scrollIntoView({
+            behavior: "smooth"
+          });
+          setPage(page);
+          setPageSize(pageSize);
         }}
-        pageNumberText="Page Number"
-        pageSize={10}
-        pageSizes={[16, 32, 64]}
+        pageNumberText={t("GALLERY.PAGINATION.PAGE_NUMBER")}
+        pageSize={12}
+        pageSizes={[12, 24, 36]}
         totalItems={gallery.videos.length}
+      />
+      <GalleryModal
+        uri={gallery.uri}
+        isOpened={isModalOpen}
+        modalVideo={modalVideo}
+        handleClose={(): void => {
+          setIsModalOpen(false);
+        }}
       />
     </section>
   ) : null;
@@ -116,7 +127,13 @@ const GaleryEntry = ({
         <span className="gallery-date">
           {(() => {
             const date = new Date(`${video.date}`);
-            return date.toLocaleString([], {hour: '2-digit', minute:'2-digit', day: '2-digit', month: '2-digit', year: '2-digit'});
+            return date.toLocaleString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+              day: "2-digit",
+              month: "2-digit",
+              year: "2-digit",
+            });
           })()}
         </span>
         {process.env.REACT_APP_SHOW_ANNOTATIONS === "true" &&
