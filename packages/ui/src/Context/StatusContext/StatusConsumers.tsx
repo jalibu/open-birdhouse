@@ -15,7 +15,6 @@ export const GlobalNotification = (): JSX.Element => {
                   <InlineNotification
                     key={`msg-${index}`}
                     kind={message?.kind || "info"}
-                    iconDescription="close"
                     className="globalNotification"
                     actions={message.actions}
                     subtitle={

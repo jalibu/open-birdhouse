@@ -21,6 +21,7 @@ const resources = {
       GALLERY: {
         TITLE: "Gallery",
         TAGS: "These tags were automatically created by AI with object recognition",
+        RECORDING: "Recording",
         PAGINATION: {
           BACKWARD: "Previous page",
           FORWARD: "Next page",
@@ -73,6 +74,7 @@ const resources = {
       GALLERY: {
         TITLE: "Galerie",
         TAGS: "Diese Tags wurden automatisch durch KI unterstütze Bilderkennung ermittelt",
+        RECORDING: "Aufzeichnung",
         PAGINATION: {
           BACKWARD: "Vorherige Seite",
           FORWARD: "Nächste Seite",

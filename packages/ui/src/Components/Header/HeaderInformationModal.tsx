@@ -10,7 +10,6 @@ export default function HeaderInformationModal({
 }): JSX.Element {
   return (
     <Modal
-      iconDescription="Close"
       modalHeading="Information"
       modalLabel=""
       onRequestClose={handleClose}

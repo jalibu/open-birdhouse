@@ -2,6 +2,7 @@ import { Video } from "@open-birdhouse/common";
 import { Modal } from "carbon-components-react";
 import ReactPlayer from "react-player";
 import React from "react";
+import { t } from "i18next";
 
 export default function GalleryModal({
   isOpened,
@@ -17,8 +18,7 @@ export default function GalleryModal({
   return modalVideo ? (
     <Modal
       className="gallery-modal"
-      iconDescription="Close"
-      modalHeading="Recording"
+      modalHeading={t('GALLERY.RECORDING')}
       onRequestClose={handleClose}
       open={isOpened}
       passiveModal

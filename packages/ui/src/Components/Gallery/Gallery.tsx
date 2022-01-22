@@ -14,7 +14,6 @@ import StatusContext from "../../Context/StatusContext/StatusContext";
 import { Video, VideoApiResponse } from "@open-birdhouse/common";
 import { Translation } from "react-i18next";
 import GalleryModal from "./GalleryModal";
-import { Minimize16 } from "@carbon/icons-react";
 
 const Gallery = ({ t }: { t: any }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -68,7 +67,7 @@ const Gallery = ({ t }: { t: any }) => {
         page={1}
         onChange={({ page, pageSize }) => {
           gallerySectionRef.current?.scrollIntoView({
-            behavior: "smooth"
+            behavior: "smooth",
           });
           setPage(page);
           setPageSize(pageSize);
