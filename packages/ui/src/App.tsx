@@ -12,6 +12,7 @@ import {
   GlobalNotification,
 } from "./Context/StatusContext/StatusConsumers";
 import Gallery from "./Components/Gallery/Gallery";
+import { ToastNotification } from "carbon-components-react";
 
 const App = ({ t }: { t: any }) => (
   <div className="container">
@@ -20,10 +21,22 @@ const App = ({ t }: { t: any }) => (
       <GlobalNotification />
       <PageHeader />
       <Content className="page-content">
-        <Cams />
-        <Controls />
-        <Gallery />
-        <Statistics />
+        {process.env.REACT_APP_MAINTENANCE_MODE !== "true" ? (
+          <>
+            <Cams />
+            <Controls />
+            <Gallery />
+            <Statistics />
+          </>
+        ) : (
+          <ToastNotification
+            hideCloseButton
+            kind="info"
+            subtitle={<span>{t('MAINTENANCE_TEXT')}</span>}
+            timeout={0}
+            title={t('MAINTENANCE_TITLE')}
+          />
+        )}
       </Content>
     </StatusContextProvider>
   </div>

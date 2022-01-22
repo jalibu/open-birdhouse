@@ -5,10 +5,12 @@ import {
   RgbLedControl,
 } from '@open-birdhouse/common';
 
+import { AppGateway } from './app.gateway';
+
 @Injectable()
 export class ControlsService {
   private controls: GenericControl[] = [];
-  constructor() {
+  constructor(private readonly appGateway: AppGateway) {
     const configInput = JSON.parse(process.env.CONTROLS) as any[];
 
     configInput.forEach((entry) => {
@@ -30,7 +32,9 @@ export class ControlsService {
   }
 
   getControls(): GenericControl[] {
-    return this.stripDownControls();
+    const strippedDownControls = this.stripDownControls();
+    this.appGateway.sendControlsUpdate(strippedDownControls);
+    return strippedDownControls;
   }
 
   setControls(input: GenericControl[]): GenericControl[] {

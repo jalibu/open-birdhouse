@@ -11,14 +11,9 @@ const REACT_APP_CAM_URL = process.env.REACT_APP_CAM_URL || "";
 
 export default class ApiRequestService extends GenericApiRequestService {
   async getCams(): Promise<Cam[] | null> {
-    const cams = await this.doFetch<Cam[]>(
-      `${REACT_APP_API_URL}/api/cams`,
-      {
-        headers: this.getHeaders(),
-      },
-      true,
-      true
-    );
+    const cams = await this.doFetch<Cam[]>(`${REACT_APP_API_URL}/api/cams`, {
+      headers: this.getHeaders(),
+    });
 
     if (cams) {
       cams.forEach((cam) => {
@@ -36,9 +31,7 @@ export default class ApiRequestService extends GenericApiRequestService {
       `${REACT_APP_API_URL}/api/statistics`,
       {
         headers: this.getHeaders(),
-      },
-      true,
-      true
+      }
     );
   }
 
@@ -48,8 +41,7 @@ export default class ApiRequestService extends GenericApiRequestService {
       {
         headers: this.getHeaders(),
       },
-      true,
-      false
+      { showLoader: false, raiseError: false }
     );
   }
 
@@ -58,9 +50,7 @@ export default class ApiRequestService extends GenericApiRequestService {
       `${REACT_APP_API_URL}/api/controls`,
       {
         headers: this.getHeaders(),
-      },
-      true,
-      true
+      }
     );
   }
 
@@ -69,9 +59,7 @@ export default class ApiRequestService extends GenericApiRequestService {
       `${REACT_APP_API_URL}/api/gallery`,
       {
         headers: this.getHeaders(),
-      },
-      true,
-      true
+      }
     );
   }
 
@@ -84,9 +72,7 @@ export default class ApiRequestService extends GenericApiRequestService {
         method: "POST",
         body: JSON.stringify(controls),
         headers: this.getHeaders(),
-      },
-      true,
-      true
+      }
     );
   }
 }

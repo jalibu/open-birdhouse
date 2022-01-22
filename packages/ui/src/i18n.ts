@@ -9,6 +9,9 @@ const resources = {
   en: {
     translation: {
       TITLE_BIRDHOUSE: "Open Birdhouse",
+      MAINTENANCE_TITLE: "Maintenance mode",
+      MAINTENANCE_TEXT:
+        "We're working on some improvents. We are back in a few minutes.",
       LOADING: "Loading",
       PAGES: {
         CAMERAS: "Cameras",
@@ -26,8 +29,8 @@ const resources = {
           BACKWARD: "Previous page",
           FORWARD: "Next page",
           ITEMS: "Items per page:",
-          PAGE_NUMBER: "Page Number"
-        }
+          PAGE_NUMBER: "Page Number",
+        },
       },
       STATS: {
         TITLE: "Statistics",
@@ -61,6 +64,9 @@ const resources = {
   de: {
     translation: {
       TITLE_BIRDHOUSE: "Vogelhaus",
+      MAINTENANCE_TITLE: "Wartungs-Modus",
+      MAINTENANCE_TEXT:
+        "Wir bauen hier gerade ein bisschen was um. Es geht in Kürze weiter.",
       LOADING: "Lade",
       PAGES: {
         CAMERAS: "Kameras",
@@ -79,8 +85,8 @@ const resources = {
           BACKWARD: "Vorherige Seite",
           FORWARD: "Nächste Seite",
           ITEMS: "Videos pro Seite",
-          PAGE_NUMBER: "Seite"
-        }
+          PAGE_NUMBER: "Seite",
+        },
       },
       STATS: {
         TITLE: "Statistik",

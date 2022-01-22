@@ -10,6 +10,7 @@ import { StatisticsController } from './statistics.controller';
 import { StatisticsService } from './statistics.service';
 import { WeatherController } from './weather.controller';
 import { WeatherService } from './weather.service';
+import { AppGateway } from './app.gateway';
 
 @Module({
   imports: [],
@@ -21,6 +22,7 @@ import { WeatherService } from './weather.service';
     WeatherController,
   ],
   providers: [
+    AppGateway,
     CamsService,
     ControlsService,
     DatabaseService,
