@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ContentGallery, GalleryUpdateResult } from '@open-birdhouse/common';
+import { Gallery, GalleryUpdateResult } from '@open-birdhouse/common';
 import { DatabaseService } from 'src/database.service';
 import { GalleryService } from './gallery.service';
 
@@ -11,7 +11,7 @@ export class GalleryController {
   ) {}
 
   @Get('/api/gallery')
-  getGalery(): ContentGallery {
+  getGalery(): Gallery {
     return {
       uri: process.env.MEDIA_URI,
       contents: this.databaseService.getGallery(),
