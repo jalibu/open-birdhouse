@@ -11,7 +11,7 @@ import {
   GlobalLoadingNotification,
   GlobalNotification,
 } from "./Context/StatusContext/StatusConsumers";
-import Gallery from "./Components/Gallery/Gallery";
+import ContentGallery from "./Components/Gallery/Gallery";
 import { ToastNotification } from "carbon-components-react";
 
 const App = ({ t }: { t: any }) => (
@@ -25,7 +25,7 @@ const App = ({ t }: { t: any }) => (
           <>
             <Cams />
             <Controls />
-            <Gallery />
+            <ContentGallery />
             <Statistics />
           </>
         ) : (

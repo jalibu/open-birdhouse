@@ -1,13 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Statistics } from '@open-birdhouse/common';
-import { DatabaseService } from './database.service';
-import { GalleryService } from './gallery.service';
+import { DatabaseService } from '../database.service';
 
 @Injectable()
 export class StatisticsService {
   constructor(
     private readonly databaseService: DatabaseService,
-    private readonly galleryService: GalleryService,
     private readonly logger: Logger,
   ) {}
 
@@ -24,9 +22,9 @@ export class StatisticsService {
 
     try {
       statistics.animals = {
-        todayCalls: this.galleryService
-          .getGalery()
-          .videos.filter((video) => video.date.getDay() === new Date().getDay())
+        todayCalls: this.databaseService
+          .getGallery()
+          .filter((content) => content.date.getDay() === new Date().getDay())
           .length,
       };
     } catch (err) {

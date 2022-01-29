@@ -1,16 +1,18 @@
 import { Module, Logger } from '@nestjs/common';
-import { AppController } from './cams.controller';
-import { CamsService } from './cams.service';
-import { ControlsController } from './controls.controller';
-import { ControlsService } from './controls.service';
+import { AppController } from './Cameras/cameras.controller';
+import { CamerasService } from './Cameras/cameras.service';
+import { ControlsController } from './Controls/controls.controller';
+import { ControlsService } from './Controls/controls.service';
 import { DatabaseService } from './database.service';
-import { GalleryController } from './gallery.controller';
-import { GalleryService } from './gallery.service';
-import { StatisticsController } from './statistics.controller';
-import { StatisticsService } from './statistics.service';
-import { WeatherController } from './weather.controller';
-import { WeatherService } from './weather.service';
+import { GalleryController } from './Gallery/gallery.controller';
+import { GalleryService } from './Gallery/gallery.service';
+import { StatisticsController } from './Statistics/statistics.controller';
+import { StatisticsService } from './Statistics/statistics.service';
+import { WeatherController } from './Weather/weather.controller';
+import { WeatherService } from './Weather/weather.service';
 import { AppGateway } from './app.gateway';
+import { UploaderService } from './Gallery/uploader.service';
+import { AnnotationService } from './Gallery/annotation.service';
 
 @Module({
   imports: [],
@@ -22,14 +24,16 @@ import { AppGateway } from './app.gateway';
     WeatherController,
   ],
   providers: [
+    AnnotationService,
     AppGateway,
-    CamsService,
+    CamerasService,
     ControlsService,
     DatabaseService,
     GalleryService,
-    StatisticsService,
-    WeatherService,
     Logger,
+    StatisticsService,
+    UploaderService,
+    WeatherService,
   ],
 })
 export class AppModule {}

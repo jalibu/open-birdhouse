@@ -8,11 +8,11 @@ import {
 } from "carbon-components-react";
 import { withTranslation } from "react-i18next";
 import ApiRequestService from "../Services/ApiRequestService";
-import { Cam } from "@open-birdhouse/common";
+import { Camera } from "@open-birdhouse/common";
 import StatusContext from "../Context/StatusContext/StatusContext";
 
 const Cams = ({ t }: { t: any }) => {
-  const [cams, setCams] = useState<Cam[]>([]);
+  const [cams, setCams] = useState<Camera[]>([]);
   const [activeCam, setActiveCam] = useState<number>(0);
   const [waitForCam, setWaitForCam] = useState<boolean>(false);
 

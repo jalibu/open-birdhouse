@@ -5,7 +5,7 @@ import {
   RgbLedControl,
 } from '@open-birdhouse/common';
 
-import { AppGateway } from './app.gateway';
+import { AppGateway } from '../app.gateway';
 
 @Injectable()
 export class ControlsService {

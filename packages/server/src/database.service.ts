@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Database, Statistics, Video } from '@open-birdhouse/common';
+import { Database, Statistics, Content } from '@open-birdhouse/common';
 import * as fs from 'fs';
 
 @Injectable()
@@ -22,22 +22,22 @@ export class DatabaseService {
     }
   }
 
-  public getGallery = (): Video[] => {
+  public getGallery = (): Content[] => {
     // Parse database date to real date
-    this.db.videos =
-      this.db.videos?.map((video) => {
-        video.date = new Date(video.date);
-        return video;
+    this.db.contents =
+      this.db.contents?.map((content) => {
+        content.date = new Date(content.date);
+        return content;
       }) || [];
-    return this.db.videos;
+    return this.db.contents;
   };
 
-  public setGallery = (newGallery: Video[]): Video[] => {
+  public setGallery = (newGallery: Content[]): Content[] => {
     const clonedDatabase = { ...this.db };
-    clonedDatabase.videos = newGallery;
+    clonedDatabase.contents = newGallery;
     this.persistData(clonedDatabase);
 
-    return this.db.videos;
+    return this.db.contents;
   };
 
   public getStatistics = (): Statistics | null => {
