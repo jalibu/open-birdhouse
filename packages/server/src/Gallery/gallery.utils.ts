@@ -2,6 +2,7 @@ import { Logger } from '@nestjs/common';
 import { Content } from '@open-birdhouse/common';
 import * as fs from 'fs';
 import { join } from 'path';
+import { Config } from 'src/Config';
 const VIDEO_FILES_TYPE = 'mp4';
 const IMAGE_FILES_TYPE = 'jpg';
 
@@ -47,8 +48,31 @@ export class GalleryUtils {
             const videoStats = fs.statSync(
               join(process.env.MEDIA_FOLDER, `${id}.${VIDEO_FILES_TYPE}`),
             );
-            content.videoUrl = `${id}.${VIDEO_FILES_TYPE}`;
-            content.filesize = videoStats.size;
+            if (
+              Config.getAsNumber('MINIMAL_VIDEO_SIZE_BYTE', 0) !== 0 &&
+              videoStats.size &&
+              videoStats.size < Config.getAsNumber('MINIMAL_VIDEO_SIZE_BYTE')
+            ) {
+              try {
+                logger.log(
+                  `Deleted '${fileName}' because it does not have the minimal file size of ${Config.getAsNumber(
+                    'MINIMAL_VIDEO_SIZE_BYTE',
+                  )} (${videoStats.size}) `,
+                  GalleryUtils.name,
+                );
+                fs.unlinkSync(
+                  join(process.env.MEDIA_FOLDER, `${id}.${VIDEO_FILES_TYPE}`),
+                );
+              } catch (err) {
+                logger.warn(
+                  `Could not delete '${fileName}': ${err.message}`,
+                  GalleryUtils.name,
+                );
+              }
+            } else {
+              content.videoUrl = `${id}.${VIDEO_FILES_TYPE}`;
+              content.filesize = videoStats.size;
+            }
           } else {
             logger.debug(
               `Image '${fileName}' does not have corresponding video file on filesystem`,
