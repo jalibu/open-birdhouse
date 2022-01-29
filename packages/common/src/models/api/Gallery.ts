@@ -9,7 +9,7 @@ export type GalleryUpdateResult = {
 
 export type Content = {
   id: string;
-  imageUrl: string;
+  imageUrl?: string;
   videoUrl?: string;
   date?: Date;
   filesize?: number;

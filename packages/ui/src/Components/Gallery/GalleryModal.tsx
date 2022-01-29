@@ -27,7 +27,7 @@ export default function GalleryModal({
       <ReactPlayer
         playing
         light={
-          modalContent.imageUrl.startsWith("http")
+          modalContent.imageUrl?.startsWith("http")
             ? modalContent.imageUrl
             : `${uri}/${modalContent?.imageUrl}`
         }

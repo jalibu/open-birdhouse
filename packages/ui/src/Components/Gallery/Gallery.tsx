@@ -112,7 +112,7 @@ const GaleryEntry = ({
         key={`img-${content.id}-${content.filesize}`}
         className="gallery-image"
         src={
-          content.imageUrl.startsWith("http")
+          content.imageUrl?.startsWith("http")
             ? content.imageUrl
             : `${uri}/${content.imageUrl}`
         }

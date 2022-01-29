@@ -53,22 +53,22 @@ export class GalleryUtils {
               videoStats.size &&
               videoStats.size < Config.getAsNumber('MINIMAL_VIDEO_SIZE_BYTE')
             ) {
-              try {
-                logger.log(
-                  `Deleted '${fileName}' because it does not have the minimal file size of ${Config.getAsNumber(
-                    'MINIMAL_VIDEO_SIZE_BYTE',
-                  )} (${videoStats.size}) `,
-                  GalleryUtils.name,
-                );
-                fs.unlinkSync(
-                  join(process.env.MEDIA_FOLDER, `${id}.${VIDEO_FILES_TYPE}`),
-                );
-              } catch (err) {
-                logger.warn(
-                  `Could not delete '${fileName}': ${err.message}`,
-                  GalleryUtils.name,
-                );
-              }
+              const deletableContent: Content = {
+                id: 'dummy',
+                videoUrl: `${id}.${VIDEO_FILES_TYPE}`,
+              };
+              logger.log(
+                `'${
+                  deletableContent.videoUrl
+                } does not have the minimal file size (${
+                  videoStats.size
+                } / ${Config.getAsNumber('MINIMAL_VIDEO_SIZE_BYTE')}) `,
+                GalleryUtils.name,
+              );
+              GalleryUtils.removeContentFromFilesystem(
+                deletableContent,
+                logger,
+              );
             } else {
               content.videoUrl = `${id}.${VIDEO_FILES_TYPE}`;
               content.filesize = videoStats.size;
@@ -89,6 +89,11 @@ export class GalleryUtils {
               `Video '${fileName}' does not have corresponding image file on filesystem`,
               GalleryUtils.name,
             );
+            const deletableContent: Content = {
+              id: 'dummy',
+              videoUrl: `${id}.${VIDEO_FILES_TYPE}`,
+            };
+            GalleryUtils.removeContentFromFilesystem(deletableContent, logger);
           }
         }
       } catch (err) {
@@ -166,7 +171,7 @@ export class GalleryUtils {
         );
       } catch (err) {
         logger.warn(
-          `Unable to delete file '${content.imageUrl}'`,
+          `Unable to delete file '${content.imageUrl}': ${err.message}`,
           GalleryUtils.name,
         );
       }
@@ -176,7 +181,7 @@ export class GalleryUtils {
         fs.unlinkSync(join(process.env.MEDIA_FOLDER, content.imageUrl));
       } catch (err) {
         logger.warn(
-          `Unable to delete file '${content.videoUrl}'`,
+          `Unable to delete file '${content.videoUrl}': ${err.message}`,
           GalleryUtils.name,
         );
       }
