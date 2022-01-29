@@ -178,7 +178,7 @@ export class GalleryUtils {
     }
     if (content.videoUrl) {
       try {
-        fs.unlinkSync(join(process.env.MEDIA_FOLDER, content.imageUrl));
+        fs.unlinkSync(join(process.env.MEDIA_FOLDER, content.videoUrl));
       } catch (err) {
         logger.warn(
           `Unable to delete file '${content.videoUrl}': ${err.message}`,
