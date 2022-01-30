@@ -24,21 +24,34 @@ export default function GalleryModal({
       passiveModal
       size="sm"
     >
-      <ReactPlayer
-        playing
-        light={
-          modalContent.imageUrl?.startsWith("http")
-            ? modalContent.imageUrl
-            : `${uri}/${modalContent?.imageUrl}`
-        }
-        url={
-          modalContent.videoUrl?.startsWith("http")
-            ? modalContent.videoUrl
-            : `${uri}/${modalContent?.videoUrl}`
-        }
-        controls
-        style={{ maxWidth: "100%", width: "100%", minHeight: "320px" }}
-      />
+      {modalContent.videoUrl ? (
+        <ReactPlayer
+          playing
+          light={
+            modalContent.imageUrl?.startsWith("http")
+              ? modalContent.imageUrl
+              : `${uri}/${modalContent?.imageUrl}`
+          }
+          url={
+            modalContent.videoUrl?.startsWith("http")
+              ? modalContent.videoUrl
+              : `${uri}/${modalContent?.videoUrl}`
+          }
+          controls
+          style={{ maxWidth: "100%", width: "100%", minHeight: "320px" }}
+        />
+      ) : (
+        <img
+          style={{ maxWidth: "100%", width: "100%", minHeight: "320px" }}
+          alt={modalContent.id}
+          src={
+            modalContent.imageUrl?.startsWith("http")
+              ? modalContent.imageUrl
+              : `${uri}/${modalContent?.imageUrl}`
+          }
+        />
+      )}
+
       <p>
         {(() => {
           const date = new Date(`${modalContent?.date}`);
@@ -51,13 +64,13 @@ export default function GalleryModal({
           });
         })()}
       </p>
-      <p>
-        {`${
+      {modalContent.filesize && modalContent.filesize > 0 && (
+        <p>{`${
           modalContent?.filesize
             ? (modalContent?.filesize / 1000000).toFixed(1)
             : 0
-        } MB`}
-      </p>
+        } MB`}</p>
+      )}
     </Modal>
   ) : null;
 }

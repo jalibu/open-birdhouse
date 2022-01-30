@@ -14,6 +14,7 @@ import StatusContext from "../../Context/StatusContext/StatusContext";
 import { Content, Gallery } from "@open-birdhouse/common";
 import { Translation } from "react-i18next";
 import GalleryModal from "./GalleryModal";
+import { VideoChat20 } from "@carbon/icons-react";
 
 const ContentGallery = ({ t }: { t: any }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -135,6 +136,7 @@ const GaleryEntry = ({
             });
           })()}
         </span>
+        {content.videoUrl && <VideoChat20 />}
         {process.env.REACT_APP_SHOW_ANNOTATIONS === "true" &&
           content?.annotations?.map((annotation, index) => (
             <Tag
