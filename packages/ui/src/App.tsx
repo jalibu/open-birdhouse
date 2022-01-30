@@ -32,9 +32,15 @@ const App = ({ t }: { t: any }) => (
           <ToastNotification
             hideCloseButton
             kind="info"
-            subtitle={<span>{t('MAINTENANCE_TEXT')}</span>}
+            subtitle={
+              <span>
+                {process.env.REACT_APP_MAINTENANCE_MODE_TEXT
+                  ? process.env.REACT_APP_MAINTENANCE_MODE_TEXT
+                  : t("MAINTENANCE_TEXT")}
+              </span>
+            }
             timeout={0}
-            title={t('MAINTENANCE_TITLE')}
+            title={t("MAINTENANCE_TITLE")}
           />
         )}
       </Content>
