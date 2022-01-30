@@ -2,15 +2,24 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Content } from '@open-birdhouse/common';
 import vision from '@google-cloud/vision';
 import { join } from 'path';
-
-const ANNOTATIONS_BLACKLIST = ['Lightning', 'Shoe'];
+import { Config } from 'src/Config';
 
 @Injectable()
 export class AnnotationService {
   private annotatotClient = new vision.ImageAnnotatorClient({
     keyFile: process.env.GOOGLE_KEYFILE,
   });
-  constructor(private readonly logger: Logger) {}
+
+  private annotationsBlacklist = JSON.parse(
+    Config.getAsString('ANNOTATIONS_BLACKLIST', '[]'),
+  );
+
+  constructor(private readonly logger: Logger) {
+    logger.log(
+      `Annotator blacklist: ${this.annotationsBlacklist}`,
+      AnnotationService.name,
+    );
+  }
 
   public async annotateContent(content: Content) {
     try {
@@ -32,16 +41,12 @@ export class AnnotationService {
         content.annotations = [];
       }
       for (const { name, score } of result.localizedObjectAnnotations) {
-        if (!ANNOTATIONS_BLACKLIST.includes(name)) {
+        if (!this.annotationsBlacklist.includes(name)) {
           content.annotations.push({ name, score });
         }
       }
       this.logger.log(
-        `Finished annotating ${content.imageUrl} with ${
-          result?.localizedObjectAnnotations?.length
-            ? result.localizedObjectAnnotations.length
-            : 0
-        } annotations`,
+        `Finished annotating ${content.imageUrl} with ${content.annotations.length} annotations`,
         AnnotationService.name,
       );
     } catch (err) {

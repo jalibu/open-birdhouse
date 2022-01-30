@@ -74,7 +74,11 @@ export class GalleryService {
               Config.getAsNumber('MINIMAL_ANNOTATION_EXPECTATION')
           ) {
             this.logger.log(
-              `${newContent.imageUrl} does not have the expected minimal number of annotations`,
+              `${
+                newContent.imageUrl
+              } does not have the expected minimal number of annotations (${
+                newContent.annotations.length
+              } / ${Config.getAsNumber('MINIMAL_ANNOTATION_EXPECTATION')})`,
               GalleryService.name,
             );
             GalleryUtils.removeContentFromFilesystem(newContent, this.logger);

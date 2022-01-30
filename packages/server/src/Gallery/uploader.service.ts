@@ -46,7 +46,6 @@ export class UploaderService {
         overwrite: false,
         public_id: id,
       });
-
       this.logger.log(`Upload of ${filePath} successful`, UploaderService.name);
       return uploadImageResponse.secure_url;
     }
