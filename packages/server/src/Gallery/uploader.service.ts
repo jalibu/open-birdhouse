@@ -42,7 +42,7 @@ export class UploaderService {
       return existingImage.secure_url;
     } catch (err) {
       const uploadImageResponse = await cloudinary.uploader.upload(filePath, {
-        resource_type: 'image',
+        resource_type: resourceType,
         overwrite: false,
         public_id: id,
       });
