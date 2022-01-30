@@ -15,7 +15,12 @@ export class UploaderService {
 
   public async uploadContent(content: Content): Promise<Content> {
     const imgPath = join(process.env.MEDIA_FOLDER, content.imageUrl);
-    content.imageUrl = await this.performUpload(content.id, imgPath, 'image');
+    content.imageUrl = await this.performUpload(
+      content.id,
+      imgPath,
+      'image',
+      content.annotations.map((annotation) => annotation.name),
+    );
     if (content.videoUrl) {
       const videoPath = join(process.env.MEDIA_FOLDER, content.videoUrl);
       content.videoUrl = await this.performUpload(
@@ -32,6 +37,7 @@ export class UploaderService {
     id: string,
     filePath: string,
     resourceType: string,
+    tags?: string[],
   ): Promise<string> {
     try {
       const existingImage = await cloudinary.uploader.explicit(id, {
@@ -45,6 +51,7 @@ export class UploaderService {
         resource_type: resourceType,
         overwrite: false,
         public_id: id,
+        tags: tags || [],
       });
       this.logger.log(`Upload of ${filePath} successful`, UploaderService.name);
       return uploadImageResponse.secure_url;
