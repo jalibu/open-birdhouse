@@ -14,6 +14,8 @@ export class AnnotationService {
     Config.getAsString('ANNOTATIONS_BLACKLIST', '[]'),
   );
 
+  private minScore = Config.getAsNumber('ANNOTATIONS_MIN_SCORE', 0);
+
   constructor(private readonly logger: Logger) {
     logger.log(
       `Annotator blacklist: ${this.annotationsBlacklist}`,
@@ -41,7 +43,10 @@ export class AnnotationService {
         content.annotations = [];
       }
       for (const { name, score } of result.localizedObjectAnnotations) {
-        if (!this.annotationsBlacklist.includes(name)) {
+        if (
+          !this.annotationsBlacklist.includes(name) &&
+          score >= this.minScore
+        ) {
           content.annotations.push({ name, score });
         }
       }
