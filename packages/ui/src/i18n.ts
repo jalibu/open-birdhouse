@@ -14,7 +14,7 @@ const resources = {
         "We're working on some improvents. We are back in a few minutes.",
       LOADING: "Loading",
       PAGES: {
-        CAMERAS: "Cameras",
+        DASHBOARD: "Dashboard",
       },
       CAMERAS: {
         IMG_ALT: "Live feed was interrupted. Please try to reload the page.",
@@ -69,7 +69,7 @@ const resources = {
         "Wir bauen hier gerade ein bisschen was um. Es geht in Kürze weiter.",
       LOADING: "Lade",
       PAGES: {
-        CAMERAS: "Kameras",
+        DASHBOARD: "Dashboard",
       },
       CAMERAS: {
         IMG_ALT:

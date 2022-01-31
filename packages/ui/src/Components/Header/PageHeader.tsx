@@ -17,7 +17,7 @@ const PageHeader = ({ t }: { t: any }) => {
   return (
     <Header aria-label="Birdhouse">
       <HeaderName href="#" prefix={t("TITLE_BIRDHOUSE")}>
-        {t("PAGES.CAMERAS")}
+        {t("PAGES.DASHBOARD")}
       </HeaderName>
       <HeaderNavigation aria-label={t("TITLE_BIRDHOUSE")} />
       <HeaderGlobalBar>
