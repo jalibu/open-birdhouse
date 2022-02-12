@@ -1,0 +1,12 @@
+[Unit]
+Description=Open Birdhouse Backend Server
+After=network.target
+
+[Service]
+WorkingDirectory=/home/pi/open-birdhouse/packages/server
+ExecStart=npm run start:prod
+Restart=on-failure
+User=pi
+
+[Install]
+WantedBy=multi-user.target

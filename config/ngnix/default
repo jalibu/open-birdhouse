@@ -1,0 +1,33 @@
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;        
+    root /var/www/html;
+
+    index index.html index.htm index.nginx-debian.html;
+
+    server_name _;
+
+    rewrite ^/$ https://birdhouse.mydomain.com redirect;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location /api {
+        proxy_pass http://localhost:3001/api;
+    }
+
+    location /admin/ {
+        proxy_pass http://localhost:8765/;
+        proxy_read_timeout 120s;
+        access_log off;
+    }
+
+    location /cam {
+        proxy_pass http://localhost:8081;
+    }
+
+    location /cam2 {
+        proxy_pass http://localhost:8082;
+    }
+}
