@@ -1,0 +1,20 @@
+# systemd unit file
+#
+# place in /etc/systemd/system
+# systemctl enable wetty.service
+# systemctl start wetty.service
+
+[Unit]
+Description=Wetty Web Terminal
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=wetty
+TimeoutStopSec=20
+KillMode=mixed
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
